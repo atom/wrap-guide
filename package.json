@@ -1,4 +1,19 @@
 {
+  "name": "wrap-guide",
+  "version": "0.0.0",
   "main": "./lib/wrap-guide-view",
-  "description": "Display a vertical line at the 80th character in the editor.\n\nThis packages uses the config value of `editor.preferredLineLength` when set."
+  "description": "Display a vertical line at the 80th character in the editor.\n\nThis packages uses the config value of `editor.preferredLineLength` when set.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atom/wrap-guide.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atom/wrap-guide/issues"
+  },
+  "engines": {
+    "atom": "*"
+  },
+  "publishConfig": {
+    "registry": "https://atom.iriscouch.com/registry/_design/app/_rewrite"
+  }
 }

@@ -7,13 +7,12 @@ By default, the wrap-guide is placed at the 80th column.
 
 ### Configuration
 
-You can customize where the column is placed using the `wrapGuide.columns`
-config option:
+You can customize where the column is placed using the following config option:
 
 ```coffeescript
 "wrap-guide":
   columns: [
-    { pattern: "\.mm$", column: 200 },
+    { pattern: "\.mm$", column: 200 }
     { pattern: "\.cc$", column: 120 }
   ]
 ```

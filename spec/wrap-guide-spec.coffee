@@ -1,4 +1,4 @@
-{Editor, RootView} = require 'atom-api'
+{Editor, RootView} = require 'atom'
 
 describe "WrapGuide", ->
   [editor, wrapGuide] = []

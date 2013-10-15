@@ -5,7 +5,7 @@ describe "WrapGuide", ->
 
   beforeEach ->
     window.rootView = new RootView
-    rootView.open('sample.js')
+    rootView.openSync('sample.js')
     atom.activatePackage('wrap-guide')
     rootView.attachToDom()
     rootView.height(200)

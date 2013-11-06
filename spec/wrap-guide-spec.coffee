@@ -62,6 +62,7 @@ describe "WrapGuide", ->
   describe "when no lines exceed the guide column and the editor width is smaller than the guide column position", ->
     it "hides the guide", ->
       rootView.width(10)
+      editor.resize()
       wrapGuide.updateGuide()
       expect(wrapGuide).toBeHidden()
 

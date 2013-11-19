@@ -38,6 +38,6 @@ class WrapGuide
       position = @editor.charWidth * column
       if position < @editor.layerMinWidth or position < @editor.width()
         @position = position
-        visible = true
+        visible = position > 0
 
     @visible = visible

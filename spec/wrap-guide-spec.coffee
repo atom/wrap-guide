@@ -8,6 +8,8 @@ describe "WrapGuide", ->
     window.rootView = new RootView
     rootView.openSync('sample.js')
     editor = rootView.getActiveView()
+    editor.charWidth = 16
+    editor.width(1500)
     wrapGuide = new WrapGuide(editor)
 
   it "has a default column position", ->
@@ -27,13 +29,15 @@ describe "WrapGuide", ->
       expect(wrapGuide.position).toBe width
 
     it "hides the guide when the config column is less than 1", ->
+      expect(wrapGuide.visible).toBe true
       config.set('wrapGuide.columns', [{pattern: 'sample\.js$', column: -1}])
       wrapGuide.updateGuide()
       expect(wrapGuide.visible).toBe false
 
   describe "when no lines exceed the guide column and the editor width is smaller than the guide column position", ->
     it "hides the guide", ->
-      rootView.width(10)
+      expect(wrapGuide.visible).toBe true
+      editor.width(10)
       editor.resize()
       wrapGuide.updateGuide()
       expect(wrapGuide.visible).toBe false

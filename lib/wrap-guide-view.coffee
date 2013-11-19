@@ -1,39 +1,20 @@
-{_, $, View} = require 'atom'
-
 module.exports =
-class WrapGuideView extends View
-  @activate: ->
-    rootView.eachEditor (editor) ->
-      if editor.attached and editor.getPane()
-        editor.underlayer.append(new WrapGuideView(editor))
+class WrapGuideView
+  constructor: (@model, @parentView) ->
+    @el = document.createElement("div")
+    @el.classList.add("wrap-guide")
+    @parentView.appendChild(@el)
 
-  @content: ->
-    @div class: 'wrap-guide'
+    @model.observe 'columnPosition', ({newValue}) => @setColumnPosition(newValue)
+    @model.observe 'columnVisible', ({newValue}) => @setColumnVisible(newValue)
 
-  initialize: (@editor) ->
-    @observeConfig 'editor.fontSize', => @updateGuide()
-    @subscribe @editor, 'editor:path-changed', => @updateGuide()
-    @subscribe @editor, 'editor:min-width-changed', => @updateGuide()
-    @subscribe $(window), 'resize', => @updateGuide()
+    @setColumnVisible(@model.columnVisible)
+    @setColumnPosition(@model.columnPosition)
 
-  getDefaultColumn: ->
-    config.getPositiveInt('editor.preferredLineLength', 80)
+  # Private
+  setColumnVisible: (visible) ->
+    @el.style.display = if visible then 'block' else 'none'
 
-  getGuideColumn: (path) ->
-    customColumns = config.get('wrapGuide.columns')
-    return @getDefaultColumn() unless _.isArray(customColumns)
-    for customColumn in customColumns when _.isObject(customColumn)
-      {pattern, column} = customColumn
-      return parseInt(column) if pattern and new RegExp(pattern).test(path)
-    @getDefaultColumn()
-
-  updateGuide: ->
-    column = @getGuideColumn(@editor.getPath())
-    if column > 0
-      columnWidth = @editor.charWidth * column
-      if columnWidth < @editor.layerMinWidth or columnWidth < @editor.width()
-        @css('left', columnWidth).show()
-      else
-        @hide()
-    else
-      @hide()
+  # Private
+  setColumnPosition: (positionInPx) ->
+    @el.style.left = "#{positionInPx}px"

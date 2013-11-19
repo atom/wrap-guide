@@ -4,7 +4,7 @@ rivets = require 'rivets'
 rivets.configure
   prefix: 'atom'
 
-rivets.binders['left'] = (el, value) ->
+rivets.binders.left = (el, value) ->
   el.style.left = "#{value}px"
 
 module.exports =

@@ -1,20 +1,19 @@
+{$} = require 'atom'
+rivets = require 'rivets'
+
+rivets.configure
+  prefix: 'atom'
+
+rivets.binders['left'] = (el, value) ->
+  el.style.left = "#{value}px"
+
 module.exports =
 class WrapGuideView
-  constructor: (@model, @parentView) ->
-    @el = document.createElement("div")
-    @el.classList.add("wrap-guide")
-    @parentView.appendChild(@el)
+  content: """
+    <div class="wrap-guide" atom-show="guide.visible" atom-left="guide.position">
+    </div>
+  """
 
-    @model.observe 'columnPosition', ({newValue}) => @setColumnPosition(newValue)
-    @model.observe 'columnVisible', ({newValue}) => @setColumnVisible(newValue)
-
-    @setColumnVisible(@model.columnVisible)
-    @setColumnPosition(@model.columnPosition)
-
-  # Private
-  setColumnVisible: (visible) ->
-    @el.style.display = if visible then 'block' else 'none'
-
-  # Private
-  setColumnPosition: (positionInPx) ->
-    @el.style.left = "#{positionInPx}px"
+  constructor: (guide, parentView) ->
+    el = $(@content).appendTo(parentView)
+    rivets.bind(el, {guide})

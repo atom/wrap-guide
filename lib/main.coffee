@@ -5,8 +5,7 @@ module.exports =
   activate: ->
     rootView.eachEditor (editor) ->
       if editor.attached and editor.getPane()
-        model = new WrapGuide(editor)
-        new WrapGuideView(model, editor.underlayer[0])
+        new WrapGuideView(new WrapGuide(editor), editor.underlayer)
 
   deactivate: ->
     # TODO: Remove subscription created in activate

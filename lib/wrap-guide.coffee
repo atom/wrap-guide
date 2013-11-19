@@ -10,6 +10,7 @@ class WrapGuide
   constructor: (@editor) ->
     @subscribe atom.config.observe 'editor.fontSize', => @updateGuide()
     @subscribe @editor, 'editor:path-changed editor:min-width-changed', => @updateGuide()
+    @subscribe @editor, 'editor:will-be-removed', => @unsubscribe()
 
     @updateGuide()
 

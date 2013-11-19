@@ -1,8 +1,5 @@
 {Subscriber} = require 'emissary'
 
-# TODO: Remove when editor emits resize events
-{$} = require 'atom'
-
 module.exports =
 class WrapGuide
   Subscriber.includeInto(this)
@@ -13,7 +10,6 @@ class WrapGuide
   constructor: (@editor) ->
     @subscribe atom.config.observe 'editor.fontSize', => @updateGuide()
     @subscribe @editor, 'editor:path-changed editor:min-width-changed', => @updateGuide()
-    @subscribe $(window), 'resize', => @updateGuide()
 
     @updateGuide()
 

@@ -24,15 +24,6 @@ describe "WrapGuideView", ->
       expect(rootView.find('.pane').length).toBe 2
       expect(rootView.panes.find('.underlayer > .wrap-guide').length).toBe 2
 
-  describe "when the font size changes", ->
-    it "updates the wrap guide position", ->
-      initial = wrapGuide.position().left
-      expect(initial).toBeGreaterThan(0)
-      fontSize = config.get("editor.fontSize")
-      config.set("editor.fontSize", fontSize + 10)
-      expect(wrapGuide.position().left).toBeGreaterThan(initial)
-      expect(wrapGuide).toBeVisible()
-
   it "only attaches to editors that are part of a pane", ->
     editor2 = new Editor(mini: true)
     editor.overlayer.append(editor2)

@@ -38,3 +38,9 @@ describe "WrapGuide", ->
       wrapGuide.updateGuide()
       expect(wrapGuide.visible).toBe false
 
+  describe "when the font size changes", ->
+    it "updates the wrap guide position", ->
+      spyOn(wrapGuide, 'updateGuide')
+      fontSize = atom.config.get("editor.fontSize")
+      atom.config.set("editor.fontSize", fontSize + 10)
+      expect(wrapGuide.updateGuide.callCount).toBe 1

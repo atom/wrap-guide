@@ -15,14 +15,13 @@ describe "WrapGuideView", ->
     editor.width(editor.charWidth * 80 * 2)
     editor.trigger 'resize'
 
-  describe "@initialize", ->
-    it "appends a wrap guide to all existing and new editors", ->
-      expect(rootView.panes.find('.underlayer > .wrap-guide').length).toBe 1
-      expect(rootView.panes.find('.underlayer > .wrap-guide').position().left).toBeGreaterThan(0)
-      expect(wrapGuide).toBeVisible()
-      editor.splitRight()
-      expect(rootView.find('.pane').length).toBe 2
-      expect(rootView.panes.find('.underlayer > .wrap-guide').length).toBe 2
+  it "appends a wrap guide to all existing and new editors", ->
+    expect(rootView.panes.find('.underlayer > .wrap-guide').length).toBe 1
+    expect(rootView.panes.find('.underlayer > .wrap-guide').position().left).toBeGreaterThan(0)
+    expect(wrapGuide).toBeVisible()
+    editor.splitRight()
+    expect(rootView.find('.pane').length).toBe 2
+    expect(rootView.panes.find('.underlayer > .wrap-guide').length).toBe 2
 
   it "only attaches to editors that are part of a pane", ->
     editor2 = new Editor(mini: true)

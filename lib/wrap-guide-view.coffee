@@ -3,7 +3,7 @@
 module.exports =
 class WrapGuideView extends View
   @activate: ->
-    rootView.eachEditor (editor) ->
+    atom.rootView.eachEditor (editor) ->
       if editor.attached and editor.getPane()
         editor.underlayer.append(new WrapGuideView(editor))
 
@@ -17,10 +17,10 @@ class WrapGuideView extends View
     @subscribe $(window), 'resize', => @updateGuide()
 
   getDefaultColumn: ->
-    config.getPositiveInt('editor.preferredLineLength', 80)
+    atom.config.getPositiveInt('editor.preferredLineLength', 80)
 
   getGuideColumn: (path) ->
-    customColumns = config.get('wrapGuide.columns')
+    customColumns = atom.config.get('wrapGuide.columns')
     return @getDefaultColumn() unless _.isArray(customColumns)
     for customColumn in customColumns when _.isObject(customColumn)
       {pattern, column} = customColumn

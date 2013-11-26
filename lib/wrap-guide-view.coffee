@@ -3,17 +3,17 @@
 module.exports =
 class WrapGuideView extends View
   @activate: ->
-    atom.workspaceView.eachEditor (editor) ->
-      if editor.attached and editor.getPane()
-        editor.underlayer.append(new WrapGuideView(editor))
+    atom.workspaceView.eachEditorView (editorView) ->
+      if editorView.attached and editorView.getPane()
+        editorView.underlayer.append(new WrapGuideView(editorView))
 
   @content: ->
     @div class: 'wrap-guide'
 
-  initialize: (@editor) ->
+  initialize: (@editorView) ->
     @observeConfig 'editor.fontSize', => @updateGuide()
-    @subscribe @editor, 'editor:path-changed', => @updateGuide()
-    @subscribe @editor, 'editor:min-width-changed', => @updateGuide()
+    @subscribe @editorView, 'editor:path-changed', => @updateGuide()
+    @subscribe @editorView, 'editor:min-width-changed', => @updateGuide()
     @subscribe $(window), 'resize', => @updateGuide()
 
   getDefaultColumn: ->
@@ -28,10 +28,10 @@ class WrapGuideView extends View
     @getDefaultColumn()
 
   updateGuide: ->
-    column = @getGuideColumn(@editor.getPath())
+    column = @getGuideColumn(@editorView.getPath())
     if column > 0
-      columnWidth = @editor.charWidth * column
-      if columnWidth < @editor.layerMinWidth or columnWidth < @editor.width()
+      columnWidth = @editorView.charWidth * column
+      if columnWidth < @editorView.layerMinWidth or columnWidth < @editorView.width()
         @css('left', columnWidth).show()
       else
         @hide()

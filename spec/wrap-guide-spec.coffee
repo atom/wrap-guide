@@ -1,27 +1,27 @@
-{Editor, RootView} = require 'atom'
+{Editor, WorkspaceView} = require 'atom'
 
 describe "WrapGuide", ->
   [editor, wrapGuide] = []
 
   beforeEach ->
-    atom.rootView = new RootView
-    atom.rootView.openSync('sample.js')
+    atom.workspaceView = new WorkspaceView
+    atom.workspaceView.openSync('sample.js')
     atom.packages.activatePackage('wrap-guide')
-    atom.rootView.attachToDom()
-    atom.rootView.height(200)
-    atom.rootView.width(1500)
-    editor = atom.rootView.getActiveView()
-    wrapGuide = atom.rootView.find('.wrap-guide').view()
+    atom.workspaceView.attachToDom()
+    atom.workspaceView.height(200)
+    atom.workspaceView.width(1500)
+    editor = atom.workspaceView.getActiveView()
+    wrapGuide = atom.workspaceView.find('.wrap-guide').view()
     editor.width(editor.charWidth * wrapGuide.getDefaultColumn() * 2)
     editor.trigger 'resize'
 
   describe "@initialize", ->
     it "appends a wrap guide to all existing and new editors", ->
-      expect(atom.rootView.panes.find('.pane').length).toBe 1
-      expect(atom.rootView.panes.find('.underlayer > .wrap-guide').length).toBe 1
+      expect(atom.workspaceView.panes.find('.pane').length).toBe 1
+      expect(atom.workspaceView.panes.find('.underlayer > .wrap-guide').length).toBe 1
       editor.splitRight()
-      expect(atom.rootView.find('.pane').length).toBe 2
-      expect(atom.rootView.panes.find('.underlayer > .wrap-guide').length).toBe 2
+      expect(atom.workspaceView.find('.pane').length).toBe 2
+      expect(atom.workspaceView.panes.find('.underlayer > .wrap-guide').length).toBe 2
 
   describe "@updateGuide", ->
     it "positions the guide at the configured column", ->
@@ -61,7 +61,7 @@ describe "WrapGuide", ->
 
   describe "when no lines exceed the guide column and the editor width is smaller than the guide column position", ->
     it "hides the guide", ->
-      atom.rootView.width(10)
+      atom.workspaceView.width(10)
       editor.resize()
       wrapGuide.updateGuide()
       expect(wrapGuide).toBeHidden()

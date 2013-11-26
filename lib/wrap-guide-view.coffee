@@ -3,7 +3,7 @@
 module.exports =
 class WrapGuideView extends View
   @activate: ->
-    atom.rootView.eachEditor (editor) ->
+    atom.workspaceView.eachEditor (editor) ->
       if editor.attached and editor.getPane()
         editor.underlayer.append(new WrapGuideView(editor))
 

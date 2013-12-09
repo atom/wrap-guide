@@ -2,4 +2,4 @@ language: objective-c
 script: ./script/cibuild
 env:
   global:
-    - secure: "KH6AqQQYm0sDjIlawBVRfds7OWyZwpjlVLaequCth4h5mCC2SeVHwE+cU2GPBsKgtZHBFlNbYBlnqO3mtaUiS6qUqqSBm+gsJQJuLAW75NqGyylpjQs7n8bP9EErqslfN0TYqF+k3Crs8YN7PvH03MZx556WPNMBHgW8xFAorR8="
+  - secure: "jKhyYrFgwLHApR4qYbsKBgRnLUq5INYGlwVwhHo4rLnhrfeIp3UPloshVe7tBBZjXAUwDn0h3VXPLY+l7wYFJZfmuruCDPxulpeimy3Grm4ac6ge/GsQPJT98e9SDpGJVbf6DE778a8A26k6bcc28Sr6ubjKGqEgiY5pIODzznk="

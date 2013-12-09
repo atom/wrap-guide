@@ -1,2 +1,3 @@
 #!/bin/sh
+echo $ATOM_ACCESS_TOKEN
 curl -s -H "Authorization: token $ATOM_ACCESS_TOKEN" -H "Accept: application/vnd.github.v3.raw" https://api.github.com/repos/atom/apm/contents/script/build-package | sh

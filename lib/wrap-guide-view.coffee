@@ -20,7 +20,7 @@ class WrapGuideView extends View
     atom.config.getPositiveInt('editor.preferredLineLength', 80)
 
   getGuideColumn: (path) ->
-    customColumns = atom.config.get('wrapGuide.columns')
+    customColumns = atom.config.get('wrap-guide.columns')
     return @getDefaultColumn() unless _.isArray(customColumns)
     for customColumn in customColumns when _.isObject(customColumn)
       {pattern, column} = customColumn

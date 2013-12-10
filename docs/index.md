@@ -24,7 +24,7 @@ that end with `.mm` and place the guide at the 120th column for paths that end
 with `.cc`.
 
 You can configure the color and/or width of the line by adding the following
-CSS to a custom stylesheet:
+CSS/LESS to a custom stylesheet:
 
 ```css
 .wrap-guide {

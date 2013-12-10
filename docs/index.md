@@ -3,7 +3,9 @@
 The `wrap-guide` extension places a vertical line in each editor at a certain
 column to guide your formatting, so lines do not exceed a certain width.
 
-By default, the wrap-guide is placed at the 80th column.
+By default, the wrap-guide is placed at the value of `editor.preferredLineLength`
+config setting. The 80th column is used as the fallback if the config value is
+unset.
 
 ### Configuration
 

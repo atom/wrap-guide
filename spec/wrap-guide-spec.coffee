@@ -41,21 +41,21 @@ describe "WrapGuide", ->
 
   describe "using a custom config column", ->
     it "places the wrap guide at the custom column", ->
-      atom.config.set('wrapGuide.columns', [{pattern: '\.js$', column: 20}])
+      atom.config.set('wrap-guide.columns', [{pattern: '\.js$', column: 20}])
       wrapGuide.updateGuide()
       width = editorView.charWidth * 20
       expect(width).toBeGreaterThan(0)
       expect(wrapGuide.position().left).toBe(width)
 
     it "uses the default column when no custom column matches the path", ->
-      atom.config.set('wrapGuide.columns', [{pattern: '\.jsp$', column: '100'}])
+      atom.config.set('wrap-guide.columns', [{pattern: '\.jsp$', column: '100'}])
       wrapGuide.updateGuide()
       width = editorView.charWidth * wrapGuide.getDefaultColumn()
       expect(width).toBeGreaterThan(0)
       expect(wrapGuide.position().left).toBe(width)
 
     it "hides the guide when the config column is less than 1", ->
-      atom.config.set('wrapGuide.columns', [{pattern: 'sample\.js$', column: -1}])
+      atom.config.set('wrap-guide.columns', [{pattern: 'sample\.js$', column: -1}])
       wrapGuide.updateGuide()
       expect(wrapGuide).toBeHidden()
 

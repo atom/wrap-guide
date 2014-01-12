@@ -12,7 +12,6 @@ describe "WrapGuide", ->
     atom.workspaceView.width(1500)
     editorView = atom.workspaceView.getActiveView()
     wrapGuide = atom.workspaceView.find('.wrap-guide').view()
-    editorView.width(editorView.charWidth * wrapGuide.getDefaultColumn() * 2)
     editorView.trigger 'resize'
 
   describe "@initialize", ->

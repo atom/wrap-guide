@@ -28,7 +28,7 @@ class WrapGuideView extends View
     @getDefaultColumn()
 
   updateGuide: ->
-    column = @getGuideColumn(@editorView.getPath())
+    column = @getGuideColumn(@editorView.getEditor().getPath())
     if column > 0
       columnWidth = @editorView.charWidth * column
       if columnWidth < @editorView.layerMinWidth or columnWidth < @editorView.width()

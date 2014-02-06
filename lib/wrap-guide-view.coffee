@@ -11,7 +11,7 @@ class WrapGuideView extends View
     @div class: 'wrap-guide'
 
   initialize: (@editorView) ->
-    @observeConfig 'editor.fontSize', => @updateGuide()
+    @subscribe atom.config.observe 'editor.fontSize', => @updateGuide()
     @subscribe @editorView, 'editor:path-changed', => @updateGuide()
     @subscribe @editorView, 'editor:min-width-changed', => @updateGuide()
     @subscribe $(window), 'resize', => @updateGuide()

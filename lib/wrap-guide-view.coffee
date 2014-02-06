@@ -1,4 +1,4 @@
-{_, $, View} = require 'atom'
+{$, View} = require 'atom'
 
 module.exports =
 class WrapGuideView extends View
@@ -21,8 +21,8 @@ class WrapGuideView extends View
 
   getGuideColumn: (path) ->
     customColumns = atom.config.get('wrap-guide.columns')
-    return @getDefaultColumn() unless _.isArray(customColumns)
-    for customColumn in customColumns when _.isObject(customColumn)
+    return @getDefaultColumn() unless Array.isArray(customColumns)
+    for customColumn in customColumns when typeof customColumn is 'object'
       {pattern, column} = customColumn
       return parseInt(column) if pattern and new RegExp(pattern).test(path)
     @getDefaultColumn()

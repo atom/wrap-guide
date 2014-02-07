@@ -6,13 +6,17 @@ describe "WrapGuide", ->
   beforeEach ->
     atom.workspaceView = new WorkspaceView
     atom.workspaceView.openSync('sample.js')
-    atom.packages.activatePackage('wrap-guide')
-    atom.workspaceView.attachToDom()
-    atom.workspaceView.height(200)
-    atom.workspaceView.width(1500)
-    editorView = atom.workspaceView.getActiveView()
-    wrapGuide = atom.workspaceView.find('.wrap-guide').view()
-    editorView.trigger 'resize'
+
+    waitsForPromise ->
+      atom.packages.activatePackage('wrap-guide')
+
+    runs ->
+      atom.workspaceView.attachToDom()
+      atom.workspaceView.height(200)
+      atom.workspaceView.width(1500)
+      editorView = atom.workspaceView.getActiveView()
+      wrapGuide = atom.workspaceView.find('.wrap-guide').view()
+      editorView.trigger 'resize'
 
   describe "@initialize", ->
     it "appends a wrap guide to all existing and new editor", ->

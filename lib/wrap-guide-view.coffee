@@ -24,7 +24,12 @@ class WrapGuideView extends View
     return @getDefaultColumn() unless Array.isArray(customColumns)
     for customColumn in customColumns when typeof customColumn is 'object'
       {pattern, column} = customColumn
-      return parseInt(column) if pattern and new RegExp(pattern).test(path)
+      continue unless pattern
+      try
+        regex = new RegExp(pattern)
+      catch
+        continue
+      return parseInt(column) if regex.test(path)
     @getDefaultColumn()
 
   updateGuide: ->

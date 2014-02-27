@@ -62,6 +62,10 @@ describe "WrapGuide", ->
       wrapGuide.updateGuide()
       expect(wrapGuide).toBeHidden()
 
+    it "ignores invalid regexes", ->
+      atom.config.set('wrap-guide.columns', [{pattern: '(', column: -1}])
+      expect(-> wrapGuide.updateGuide()).not.toThrow()
+
   describe "when no lines exceed the guide column and the editor width is smaller than the guide column position", ->
     it "hides the guide", ->
       atom.workspaceView.width(10)

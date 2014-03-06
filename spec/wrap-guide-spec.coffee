@@ -42,6 +42,19 @@ describe "WrapGuide", ->
       expect(wrapGuide.position().left).toBeGreaterThan(initial)
       expect(wrapGuide).toBeVisible()
 
+  describe "when the column config changes", ->
+    it "updates the wrap guide position", ->
+      initial = wrapGuide.position().left
+      expect(initial).toBeGreaterThan(0)
+      column = atom.config.get("editor.preferredLineLength")
+      atom.config.set("editor.preferredLineLength", column + 10)
+      expect(wrapGuide.position().left).toBeGreaterThan(initial)
+      expect(wrapGuide).toBeVisible()
+
+      atom.config.set("wrap-guide.columns", [{pattern: ".*", column: column - 10}])
+      expect(wrapGuide.position().left).toBeLessThan(initial)
+      expect(wrapGuide).toBeVisible()
+
   describe "using a custom config column", ->
     it "places the wrap guide at the custom column", ->
       atom.config.set('wrap-guide.columns', [{pattern: '\.js$', column: 20}])

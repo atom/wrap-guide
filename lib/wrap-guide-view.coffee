@@ -24,11 +24,8 @@ class WrapGuideView extends View
     atom.config.getPositiveInt('editor.preferredLineLength', 80)
 
   getGuideColumn: (path) ->
-    customColumns = atom.config.get('wrap-guide.columns')
-    return @getDefaultColumn() unless Array.isArray(customColumns)
-    for customColumn in customColumns when typeof customColumn is 'object'
-      {pattern, column} = customColumn
-      continue unless pattern
+    customColumns = atom.config.get('wrap-guide.columns') ? {}
+    for pattern, column of customColumns
       try
         regex = new RegExp(pattern)
       catch

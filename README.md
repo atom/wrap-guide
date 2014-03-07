@@ -13,7 +13,7 @@ You can change the color with the following CSS rule:
 ```
 
 You can use custom columns for different file types by adding something
-similar to the following to your `~/.atom/config.cson` file:
+like the following to your `~/.atom/config.cson` file:
 
 ```coffee
 'wrap-guide':

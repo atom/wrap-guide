@@ -1,4 +1,4 @@
-# Wrap Guide package
+# Wrap Guide package [![Build Status](https://travis-ci.org/atom/wrap-guide.svg?branch=master)](https://travis-ci.org/atom/wrap-guide)
 
 Displays a vertical line at the 80th character in the editor.
 

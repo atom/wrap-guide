@@ -88,7 +88,7 @@ describe "WrapGuide", ->
       wrapGuide.updateGuide()
       expect(wrapGuide).toBeHidden()
 
-  it "only attaches to editorViews that are part of a pane", ->
+  it "only attaches to editor views that are part of a pane", ->
     editorView2 = new EditorView(mini: true)
     editorView.overlayer.append(editorView2)
     expect(editorView2.find('.wrap-guide').length).toBe 0

@@ -60,6 +60,17 @@ describe "WrapGuide", ->
       expect(wrapGuide.position().left).toBeLessThan(initial)
       expect(wrapGuide).toBeVisible()
 
+  describe "when the editor's grammar changes", ->
+    it "updates the wrap guide position", ->
+      atom.config.set('wrap-guide.columns', [{scope: 'source.js', column: 20}])
+      initial = wrapGuide.position().left
+      expect(initial).toBeGreaterThan(0)
+      expect(wrapGuide).toBeVisible()
+
+      editorView.editor.setGrammar(atom.syntax.grammarForScopeName('text.plain.null-grammar'))
+      expect(wrapGuide.position().left).toBeGreaterThan(initial)
+      expect(wrapGuide).toBeVisible()
+
   describe "using a custom config column", ->
     it "places the wrap guide at the custom column", ->
       atom.config.set('wrap-guide.columns', [{pattern: '\.js$', column: 20}])

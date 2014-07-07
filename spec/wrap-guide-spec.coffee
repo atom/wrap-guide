@@ -12,6 +12,9 @@ describe "WrapGuide", ->
     waitsForPromise ->
       atom.packages.activatePackage('wrap-guide')
 
+    waitsForPromise ->
+      atom.packages.activatePackage('language-javascript')
+
     runs ->
       atom.workspaceView.attachToDom()
       atom.workspaceView.height(200)
@@ -80,6 +83,28 @@ describe "WrapGuide", ->
     it "ignores invalid regexes", ->
       atom.config.set('wrap-guide.columns', [{pattern: '(', column: -1}])
       expect(-> wrapGuide.updateGuide()).not.toThrow()
+
+    it "places the wrap guide at the custom column using scope name", ->
+      atom.config.set('wrap-guide.columns', [{scope: 'source.js', column: 20}])
+      wrapGuide.updateGuide()
+      width = editorView.charWidth * 20
+      expect(width).toBeGreaterThan(0)
+      expect(wrapGuide.position().left).toBe(width)
+
+    it "uses the default column when no scope name matches", ->
+      atom.config.set('wrap-guide.columns', [{scope: 'source.gfm', column: '100'}])
+      wrapGuide.updateGuide()
+      width = editorView.charWidth * wrapGuide.getDefaultColumn()
+      expect(width).toBeGreaterThan(0)
+      expect(wrapGuide.position().left).toBe(width)
+
+    it "favors the first matching rule", ->
+      atom.config.set('wrap-guide.columns', [{pattern: '\.js$', column: 20},
+                                             {scope: 'source.js', column: 30}])
+      wrapGuide.updateGuide()
+      width = editorView.charWidth * 20
+      expect(width).toBeGreaterThan(0)
+      expect(wrapGuide.position().left).toBe(width)
 
   describe "when no lines exceed the guide column and the editor width is smaller than the guide column position", ->
     it "hides the guide", ->

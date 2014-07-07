@@ -23,21 +23,25 @@ class WrapGuideView extends View
   getDefaultColumn: ->
     atom.config.getPositiveInt('editor.preferredLineLength', 80)
 
-  getGuideColumn: (path) ->
+  getGuideColumn: (path, scopeName) ->
     customColumns = atom.config.get('wrap-guide.columns')
     return @getDefaultColumn() unless Array.isArray(customColumns)
     for customColumn in customColumns when typeof customColumn is 'object'
-      {pattern, column} = customColumn
-      continue unless pattern
-      try
-        regex = new RegExp(pattern)
-      catch
-        continue
-      return parseInt(column) if regex.test(path)
+      {pattern, scope, column} = customColumn
+      continue unless pattern or scope
+      if pattern
+        try
+          regex = new RegExp(pattern)
+        catch
+          continue
+        return parseInt(column) if regex.test(path)
+      else
+        return parseInt(column) if scope is scopeName
     @getDefaultColumn()
 
   updateGuide: ->
-    column = @getGuideColumn(@editorView.getEditor().getPath())
+    editor = @editorView.getEditor()
+    column = @getGuideColumn(editor.getPath(), editor.getGrammar().scopeName)
     if column > 0
       columnWidth = @editorView.charWidth * column
       if columnWidth < @editorView.layerMinWidth or columnWidth < @editorView.width()

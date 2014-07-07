@@ -29,14 +29,13 @@ class WrapGuideView extends View
     return @getDefaultColumn() unless Array.isArray(customColumns)
     for customColumn in customColumns when typeof customColumn is 'object'
       {pattern, scope, column} = customColumn
-      continue unless pattern or scope
-      if pattern
+      if pattern?
         try
           regex = new RegExp(pattern)
         catch
           continue
         return parseInt(column) if regex.test(path)
-      else
+      else if scope?
         return parseInt(column) if scope is scopeName
     @getDefaultColumn()
 

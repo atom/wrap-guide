@@ -14,7 +14,7 @@ class WrapGuideView extends View
     @subscribe atom.config.observe 'editor.fontSize', callNow: false, => @updateGuide()
     @subscribe atom.config.observe 'editor.preferredLineLength', callNow: false, => @updateGuide()
     @subscribe atom.config.observe 'wrap-guide.columns', callNow: false, => @updateGuide()
-    @subscribe @editorView, 'editor:path-changed', => @updateGuide()
+    @subscribe @editorView.getEditor(), 'path-changed', => @updateGuide()
     @subscribe @editorView.getEditor(), 'grammar-changed', => @updateGuide()
     @subscribe $(window), 'resize', => @updateGuide()
 

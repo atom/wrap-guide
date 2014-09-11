@@ -21,7 +21,6 @@ describe "WrapGuide", ->
       atom.workspaceView.width(1500)
       editorView = atom.workspaceView.getActiveView()
       wrapGuide = atom.workspaceView.find('.wrap-guide').view()
-      editorView.trigger 'resize'
 
   describe "@initialize", ->
     it "appends a wrap guide to all existing and new editor", ->
@@ -116,13 +115,6 @@ describe "WrapGuide", ->
       width = editorView.charWidth * 20
       expect(width).toBeGreaterThan(0)
       expect(wrapGuide.position().left).toBe(width)
-
-  describe "when no lines exceed the guide column and the editor width is smaller than the guide column position", ->
-    it "hides the guide", ->
-      atom.workspaceView.width(10)
-      editorView.resize()
-      wrapGuide.updateGuide()
-      expect(wrapGuide).toBeHidden()
 
   it "only attaches to editor views that are part of a pane", ->
     editorView2 = new EditorView(mini: true)

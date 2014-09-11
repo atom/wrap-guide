@@ -11,12 +11,12 @@ class WrapGuideView extends View
     @div class: 'wrap-guide'
 
   initialize: (@editorView) ->
-    @subscribe atom.config.observe 'editor.fontSize', callNow: false, => @updateGuide()
-    @subscribe atom.config.observe 'editor.preferredLineLength', callNow: false, => @updateGuide()
-    @subscribe atom.config.observe 'wrap-guide.columns', callNow: false, => @updateGuide()
-    @subscribe @editorView.getEditor(), 'path-changed', => @updateGuide()
-    @subscribe @editorView.getEditor(), 'grammar-changed', => @updateGuide()
-    @subscribe $(window), 'resize', => @updateGuide()
+    @subscribe atom.config.observe 'editor.fontSize', callNow: false, @updateGuide
+    @subscribe atom.config.observe 'editor.preferredLineLength', callNow: false, @updateGuide
+    @subscribe atom.config.observe 'wrap-guide.columns', callNow: false, @updateGuide
+    @subscribe @editorView.getEditor(), 'path-changed', @updateGuide
+    @subscribe @editorView.getEditor(), 'grammar-changed', @updateGuide
+    @subscribe $(window), 'resize', @updateGuide
 
     @updateGuide()
 
@@ -38,14 +38,11 @@ class WrapGuideView extends View
         return parseInt(column) if scope is scopeName
     @getDefaultColumn()
 
-  updateGuide: ->
+  updateGuide: =>
     editor = @editorView.getEditor()
     column = @getGuideColumn(editor.getPath(), editor.getGrammar().scopeName)
     if column > 0
       columnWidth = @editorView.charWidth * column
-      if columnWidth < @editorView.width()
-        @css('left', columnWidth).show()
-      else
-        @hide()
+      @css('left', columnWidth).show()
     else
       @hide()

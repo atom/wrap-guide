@@ -5,17 +5,17 @@ class WrapGuideView extends View
   @activate: ->
     atom.workspaceView.eachEditorView (editorView) ->
       if editorView.attached and editorView.getPane()
-        editorView.underlayer.append(new WrapGuideView(editorView))
+        editorView.underlayer.append(new WrapGuideView(editorView.getModel()))
 
   @content: ->
     @div class: 'wrap-guide'
 
-  initialize: (@editorView) ->
+  initialize: (@editor) ->
     @subscribe atom.config.observe 'editor.fontSize', callNow: false, @updateGuide
     @subscribe atom.config.observe 'editor.preferredLineLength', callNow: false, @updateGuide
     @subscribe atom.config.observe 'wrap-guide.columns', callNow: false, @updateGuide
-    @subscribe @editorView.getEditor(), 'path-changed', @updateGuide
-    @subscribe @editorView.getEditor(), 'grammar-changed', @updateGuide
+    @subscribe @editor, 'path-changed', @updateGuide
+    @subscribe @editor, 'grammar-changed', @updateGuide
 
     @updateGuide()
 
@@ -25,6 +25,7 @@ class WrapGuideView extends View
   getGuideColumn: (path, scopeName) ->
     customColumns = atom.config.get('wrap-guide.columns')
     return @getDefaultColumn() unless Array.isArray(customColumns)
+
     for customColumn in customColumns when typeof customColumn is 'object'
       {pattern, scope, column} = customColumn
       if pattern
@@ -38,10 +39,9 @@ class WrapGuideView extends View
     @getDefaultColumn()
 
   updateGuide: =>
-    editor = @editorView.getEditor()
-    column = @getGuideColumn(editor.getPath(), editor.getGrammar().scopeName)
+    column = @getGuideColumn(@editor.getPath(), @editor.getGrammar().scopeName)
     if column > 0
-      columnWidth = editor.getDefaultCharWidth() * column
+      columnWidth = @editor.getDefaultCharWidth() * column
       @element.style.left = "#{columnWidth}px"
       @element.style.display = 'block'
     else

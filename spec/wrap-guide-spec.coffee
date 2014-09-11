@@ -23,7 +23,7 @@ describe "WrapGuide", ->
       wrapGuide = atom.workspaceView.find('.wrap-guide')[0]
 
   describe "@initialize", ->
-    it "appends a wrap guide to all existing and new editor", ->
+    it "appends a wrap guide to all existing and new editors", ->
       expect(atom.workspaceView.panes.find('.pane').length).toBe 1
       expect(atom.workspaceView.panes.find('.underlayer > .wrap-guide').length).toBe 1
       editorView.splitRight()

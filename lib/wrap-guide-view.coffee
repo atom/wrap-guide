@@ -1,23 +1,32 @@
-{$, View} = require 'atom'
-
 module.exports =
-class WrapGuideView extends View
+class WrapGuideView extends HTMLElement
   @activate: ->
-    atom.workspaceView.eachEditorView (editorView) ->
-      if editorView.attached and editorView.getPane()
-        editorView.underlayer.append(new WrapGuideView(editorView.getModel()))
+    atom.workspaceView.eachEditorView (editorView) =>
+      @create(editorView) if editorView.attached and editorView.getPane()
 
-  @content: ->
-    @div class: 'wrap-guide'
+  @create: (editorView) ->
+    wrapGuideElement = new WrapGuideElement()
+    wrapGuideElement.initialize(editorView.getModel())
+    editorView.underlayer.element.appendChild(wrapGuideElement)
 
   initialize: (@editor) ->
-    @subscribe atom.config.observe 'editor.fontSize', callNow: false, @updateGuide
-    @subscribe atom.config.observe 'editor.preferredLineLength', callNow: false, @updateGuide
-    @subscribe atom.config.observe 'wrap-guide.columns', callNow: false, @updateGuide
-    @subscribe @editor, 'path-changed', @updateGuide
-    @subscribe @editor, 'grammar-changed', @updateGuide
+    @classList.add('wrap-guide')
 
+    @handleEvents()
     @updateGuide()
+
+  handleEvents: ->
+    updateGuideCallback = => @updateGuide()
+
+    subscriptions = []
+    subscriptions.push atom.config.observe 'editor.fontSize', callNow: false, updateGuideCallback
+    subscriptions.push atom.config.observe 'editor.preferredLineLength', callNow: false, updateGuideCallback
+    subscriptions.push atom.config.observe 'wrap-guide.columns', callNow: false, updateGuideCallback
+    subscriptions.push @editor.on('path-changed', updateGuideCallback)
+    subscriptions.push @editor.on('grammar-changed', updateGuideCallback)
+    subscriptions.push @editor.on 'destroyed', =>
+      while subscription = subscriptions.pop()
+        subscription.off()
 
   getDefaultColumn: ->
     atom.config.getPositiveInt('editor.preferredLineLength', 80)
@@ -38,11 +47,13 @@ class WrapGuideView extends View
         return parseInt(column) if scope is scopeName
     @getDefaultColumn()
 
-  updateGuide: =>
+  updateGuide: ->
     column = @getGuideColumn(@editor.getPath(), @editor.getGrammar().scopeName)
     if column > 0
       columnWidth = @editor.getDefaultCharWidth() * column
-      @element.style.left = "#{columnWidth}px"
-      @element.style.display = 'block'
+      @style.left = "#{columnWidth}px"
+      @style.display = 'block'
     else
-      @element.style.display = 'none'
+      @style.display = 'none'
+
+WrapGuideElement = document.registerElement('wrap-guide', prototype: WrapGuideView.prototype, extends: 'li')

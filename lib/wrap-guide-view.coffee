@@ -56,4 +56,4 @@ class WrapGuideView extends HTMLElement
     else
       @style.display = 'none'
 
-WrapGuideElement = document.registerElement('wrap-guide', prototype: WrapGuideView.prototype, extends: 'li')
+WrapGuideElement = document.registerElement('wrap-guide', prototype: WrapGuideView.prototype, extends: 'div')

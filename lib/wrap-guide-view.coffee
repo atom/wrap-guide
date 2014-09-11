@@ -41,7 +41,7 @@ class WrapGuideView extends View
     editor = @editorView.getEditor()
     column = @getGuideColumn(editor.getPath(), editor.getGrammar().scopeName)
     if column > 0
-      columnWidth = @editorView.charWidth * column
+      columnWidth = editor.getDefaultCharWidth() * column
       @element.style.left = "#{columnWidth}px"
       @element.style.display = 'block'
     else

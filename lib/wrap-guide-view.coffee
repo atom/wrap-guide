@@ -15,7 +15,6 @@ class WrapGuideView extends View
     @subscribe atom.config.observe 'editor.preferredLineLength', callNow: false, => @updateGuide()
     @subscribe atom.config.observe 'wrap-guide.columns', callNow: false, => @updateGuide()
     @subscribe @editorView, 'editor:path-changed', => @updateGuide()
-    @subscribe @editorView, 'editor:min-width-changed', => @updateGuide()
     @subscribe @editorView.getEditor(), 'grammar-changed', => @updateGuide()
     @subscribe $(window), 'resize', => @updateGuide()
 
@@ -44,7 +43,7 @@ class WrapGuideView extends View
     column = @getGuideColumn(editor.getPath(), editor.getGrammar().scopeName)
     if column > 0
       columnWidth = @editorView.charWidth * column
-      if columnWidth < @editorView.layerMinWidth or columnWidth < @editorView.width()
+      if columnWidth < @editorView.width()
         @css('left', columnWidth).show()
       else
         @hide()

@@ -5,6 +5,9 @@ describe "WrapGuide", ->
 
   beforeEach ->
     atom.workspaceView = new WorkspaceView
+    atom.workspaceView.attachToDom()
+    atom.workspaceView.height(200)
+    atom.workspaceView.width(1500)
 
     waitsForPromise ->
       atom.workspace.open('sample.js')
@@ -16,9 +19,6 @@ describe "WrapGuide", ->
       atom.packages.activatePackage('language-javascript')
 
     runs ->
-      atom.workspaceView.attachToDom()
-      atom.workspaceView.height(200)
-      atom.workspaceView.width(1500)
       editorView = atom.workspaceView.getActiveView()
       wrapGuide = atom.workspaceView.find('.wrap-guide')[0]
 

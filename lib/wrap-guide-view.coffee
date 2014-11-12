@@ -23,9 +23,7 @@ class WrapGuideView extends HTMLElement
     subscriptions.push atom.config.onDidChange('wrap-guide.columns', updateGuideCallback)
     subscriptions.push atom.config.onDidChange 'editor.fontSize', =>
       # setTimeout because we need to wait for the editor measurement to happen
-      setTimeout =>
-        @updateGuide()
-      , 0
+      setTimeout(updateGuideCallback, 0)
 
     subscriptions.push @editor.onDidChangePath(updateGuideCallback)
     subscriptions.push @editor.onDidChangeGrammar(updateGuideCallback)

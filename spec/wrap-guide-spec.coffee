@@ -43,6 +43,8 @@ describe "WrapGuide", ->
       expect(initial).toBeGreaterThan(0)
       fontSize = atom.config.get("editor.fontSize")
       atom.config.set("editor.fontSize", fontSize + 10)
+
+      advanceClock(1)
       expect($(wrapGuide).position().left).toBeGreaterThan(initial)
       expect(wrapGuide).toBeVisible()
 

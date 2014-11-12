@@ -19,12 +19,17 @@ class WrapGuideView extends HTMLElement
     updateGuideCallback = => @updateGuide()
 
     subscriptions = []
-    subscriptions.push atom.config.observe('editor.fontSize', callNow: false, updateGuideCallback)
-    subscriptions.push atom.config.observe('editor.preferredLineLength', callNow: false, updateGuideCallback)
-    subscriptions.push atom.config.observe('wrap-guide.columns', callNow: false, updateGuideCallback)
-    subscriptions.push @editor.on('path-changed', updateGuideCallback)
-    subscriptions.push @editor.on('grammar-changed', updateGuideCallback)
-    subscriptions.push @editor.on 'destroyed', =>
+    subscriptions.push atom.config.onDidChange('editor.preferredLineLength', updateGuideCallback)
+    subscriptions.push atom.config.onDidChange('wrap-guide.columns', updateGuideCallback)
+    subscriptions.push atom.config.onDidChange 'editor.fontSize', =>
+      # setTimeout because we need to wait for the editor measurement to happen
+      setTimeout =>
+        @updateGuide()
+      , 0
+
+    subscriptions.push @editor.onDidChangePath(updateGuideCallback)
+    subscriptions.push @editor.onDidChangeGrammar(updateGuideCallback)
+    subscriptions.push @editor.onDidDestroy =>
       while subscription = subscriptions.pop()
         subscription.off()
 

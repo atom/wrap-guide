@@ -32,7 +32,7 @@ class WrapGuideView extends HTMLElement
         subscription.off()
 
   getDefaultColumn: ->
-    atom.config.getPositiveInt('editor.preferredLineLength', 80)
+    atom.config.get('editor.preferredLineLength')
 
   getGuideColumn: (path, scopeName) ->
     customColumns = atom.config.get('wrap-guide.columns')

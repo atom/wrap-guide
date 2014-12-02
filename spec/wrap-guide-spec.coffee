@@ -69,7 +69,7 @@ describe "WrapGuide", ->
       expect(initial).toBeGreaterThan(0)
       expect(wrapGuide).toBeVisible()
 
-      editor.setGrammar(atom.syntax.grammarForScopeName('text.plain.null-grammar'))
+      editor.setGrammar(atom.grammars.grammarForScopeName('text.plain.null-grammar'))
       expect(getLeftPosition(wrapGuide)).toBeGreaterThan(initial)
       expect(wrapGuide).toBeVisible()
 

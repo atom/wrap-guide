@@ -1,13 +1,14 @@
-{$, EditorView, WorkspaceView} = require 'atom'
+{$, EditorView} = require 'atom'
 
 describe "WrapGuide", ->
-  [editorView, wrapGuide] = []
+  [editorView, wrapGuide, workspaceElement] = []
 
   beforeEach ->
-    atom.workspaceView = new WorkspaceView
-    atom.workspaceView.attachToDom()
-    atom.workspaceView.height(200)
-    atom.workspaceView.width(1500)
+    workspaceElement = atom.views.getView(atom.workspace)
+    workspaceElement.style.height = "200px"
+    workspaceElement.style.widht = "1500px"
+
+    jasmine.attachToDOM(workspaceElement)
 
     waitsForPromise ->
       atom.workspace.open('sample.js')
@@ -19,18 +20,18 @@ describe "WrapGuide", ->
       atom.packages.activatePackage('language-javascript')
 
     runs ->
-      editorView = atom.workspaceView.getActiveView()
-      wrapGuide = atom.workspaceView.find('.wrap-guide')[0]
+      editor = atom.workspace.getActiveTextEditor()
+      editorView = atom.views.getView(editor).__spacePenView
+      wrapGuide = workspaceElement.querySelector(".wrap-guide")
 
-  describe "@initialize", ->
+  describe ".activate", ->
     it "appends a wrap guide to all existing and new editors", ->
-      expect(atom.workspaceView.panes.find('.pane').length).toBe 1
-      expect(atom.workspaceView.panes.find('.underlayer > .wrap-guide').length).toBe 1
-      editorView.splitRight()
-      expect(atom.workspaceView.find('.pane').length).toBe 2
-      expect(atom.workspaceView.panes.find('.underlayer > .wrap-guide').length).toBe 2
+      expect(atom.workspace.getPanes().length).toBe 1
+      expect(workspaceElement.querySelectorAll(".underlayer > .wrap-guide").length).toBe 1
+      atom.workspace.getActivePane().splitRight(copyActiveItem: true)
+      expect(atom.workspace.getPanes().length).toBe 2
+      expect(workspaceElement.querySelectorAll(".underlayer > .wrap-guide").length).toBe 2
 
-  describe "@updateGuide", ->
     it "positions the guide at the configured column", ->
       width = editorView.charWidth * wrapGuide.getDefaultColumn()
       expect(width).toBeGreaterThan(0)

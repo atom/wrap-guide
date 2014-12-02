@@ -2,9 +2,9 @@ WrapGuideElement = require './wrap-guide-element'
 
 module.exports =
   activate: ->
-    atom.workspaceView.eachEditorView (editorView) =>
-      if editorView.attached and editorView.getPane()
-        wrapGuideElement = new WrapGuideElement().initialize(editorView.getModel())
-        editorView.underlayer.element.appendChild(wrapGuideElement)
+    atom.workspace.observeTextEditors (editor) =>
+      wrapGuideElement = new WrapGuideElement().initialize(editor)
+      editorElement = atom.views.getView(editor)
+      editorElement.querySelector(".underlayer")?.appendChild(wrapGuideElement)
 
   deactivate: ->

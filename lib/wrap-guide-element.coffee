@@ -1,4 +1,4 @@
-{CompositeDisposable} = require 'event-kit'
+{CompositeDisposable} = require 'atom'
 
 class WrapGuideElement extends HTMLDivElement
   initialize: (@editor) ->

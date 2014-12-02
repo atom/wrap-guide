@@ -7,8 +7,5 @@
   "repository": "https://github.com/atom/wrap-guide",
   "engines": {
     "atom": "*"
-  },
-  "dependencies": {
-    "event-kit": "^0.8.0"
   }
 }

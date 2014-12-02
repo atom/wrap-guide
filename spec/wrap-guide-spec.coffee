@@ -1,8 +1,8 @@
 describe "WrapGuide", ->
   [editor, wrapGuide, workspaceElement] = []
 
-  getLeftPosition = (el) ->
-    parseInt(el.style.left)
+  getLeftPosition = (element) ->
+    parseInt(element.style.left)
 
   beforeEach ->
     workspaceElement = atom.views.getView(atom.workspace)

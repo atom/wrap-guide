@@ -19,7 +19,7 @@ class WrapGuideElement extends HTMLDivElement
 
     subscriptions.add @editor.onDidChangePath(updateGuideCallback)
     subscriptions.add @editor.onDidChangeGrammar(updateGuideCallback)
-    subscriptions.add @editor.onDidDestroy =>
+    subscriptions.add @editor.onDidDestroy ->
       subscriptions.dispose()
 
   getDefaultColumn: ->
@@ -53,5 +53,5 @@ class WrapGuideElement extends HTMLDivElement
 module.exports =
 document.registerElement('wrap-guide',
   extends: 'div'
-  prototype: WrapGuideElement.prototype,
+  prototype: WrapGuideElement.prototype
 )

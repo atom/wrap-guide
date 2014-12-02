@@ -10,7 +10,7 @@ This packages uses the config value of `editor.preferredLineLength` when set.
 You can change the color with the following CSS rule:
 
 ```css
-.editor .wrap-guide {
+atom-text-editor .wrap-guide {
   background-color: green;
 }
 ```

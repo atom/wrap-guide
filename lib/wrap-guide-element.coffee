@@ -1,19 +1,9 @@
-module.exports =
-class WrapGuideView extends HTMLElement
-  @activate: ->
-    atom.workspaceView.eachEditorView (editorView) =>
-      @create(editorView) if editorView.attached and editorView.getPane()
-
-  @create: (editorView) ->
-    wrapGuideElement = new WrapGuideElement()
-    wrapGuideElement.initialize(editorView.getModel())
-    editorView.underlayer.element.appendChild(wrapGuideElement)
-
+class WrapGuideElement extends HTMLDivElement
   initialize: (@editor) ->
     @classList.add('wrap-guide')
-
     @handleEvents()
     @updateGuide()
+    this
 
   handleEvents: ->
     updateGuideCallback = => @updateGuide()
@@ -59,4 +49,8 @@ class WrapGuideView extends HTMLElement
     else
       @style.display = 'none'
 
-WrapGuideElement = document.registerElement('wrap-guide', prototype: WrapGuideView.prototype, extends: 'div')
+module.exports =
+document.registerElement('wrap-guide',
+  extends: 'div'
+  prototype: WrapGuideElement.prototype,
+)

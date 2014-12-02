@@ -1,3 +1,5 @@
+{CompositeDisposable} = require 'event-kit'
+
 class WrapGuideElement extends HTMLDivElement
   initialize: (@editor) ->
     @classList.add('wrap-guide')
@@ -8,18 +10,17 @@ class WrapGuideElement extends HTMLDivElement
   handleEvents: ->
     updateGuideCallback = => @updateGuide()
 
-    subscriptions = []
-    subscriptions.push atom.config.onDidChange('editor.preferredLineLength', updateGuideCallback)
-    subscriptions.push atom.config.onDidChange('wrap-guide.columns', updateGuideCallback)
-    subscriptions.push atom.config.onDidChange 'editor.fontSize', =>
+    subscriptions = new CompositeDisposable
+    subscriptions.add atom.config.onDidChange('editor.preferredLineLength', updateGuideCallback)
+    subscriptions.add atom.config.onDidChange('wrap-guide.columns', updateGuideCallback)
+    subscriptions.add atom.config.onDidChange 'editor.fontSize', =>
       # setTimeout because we need to wait for the editor measurement to happen
       setTimeout(updateGuideCallback, 0)
 
-    subscriptions.push @editor.onDidChangePath(updateGuideCallback)
-    subscriptions.push @editor.onDidChangeGrammar(updateGuideCallback)
-    subscriptions.push @editor.onDidDestroy =>
-      while subscription = subscriptions.pop()
-        subscription.off()
+    subscriptions.add @editor.onDidChangePath(updateGuideCallback)
+    subscriptions.add @editor.onDidChangeGrammar(updateGuideCallback)
+    subscriptions.add @editor.onDidDestroy =>
+      subscriptions.dispose()
 
   getDefaultColumn: ->
     atom.config.get('editor.preferredLineLength')

@@ -1,35 +1,26 @@
-module.exports =
-class WrapGuideView extends HTMLElement
-  @activate: ->
-    atom.workspaceView.eachEditorView (editorView) =>
-      @create(editorView) if editorView.attached and editorView.getPane()
+{CompositeDisposable} = require 'atom'
 
-  @create: (editorView) ->
-    wrapGuideElement = new WrapGuideElement()
-    wrapGuideElement.initialize(editorView.getModel())
-    editorView.underlayer.element.appendChild(wrapGuideElement)
-
+class WrapGuideElement extends HTMLDivElement
   initialize: (@editor) ->
     @classList.add('wrap-guide')
-
     @handleEvents()
     @updateGuide()
+    this
 
   handleEvents: ->
     updateGuideCallback = => @updateGuide()
 
-    subscriptions = []
-    subscriptions.push atom.config.onDidChange('editor.preferredLineLength', updateGuideCallback)
-    subscriptions.push atom.config.onDidChange('wrap-guide.columns', updateGuideCallback)
-    subscriptions.push atom.config.onDidChange 'editor.fontSize', =>
+    subscriptions = new CompositeDisposable
+    subscriptions.add atom.config.onDidChange('editor.preferredLineLength', updateGuideCallback)
+    subscriptions.add atom.config.onDidChange('wrap-guide.columns', updateGuideCallback)
+    subscriptions.add atom.config.onDidChange 'editor.fontSize', =>
       # setTimeout because we need to wait for the editor measurement to happen
       setTimeout(updateGuideCallback, 0)
 
-    subscriptions.push @editor.onDidChangePath(updateGuideCallback)
-    subscriptions.push @editor.onDidChangeGrammar(updateGuideCallback)
-    subscriptions.push @editor.onDidDestroy =>
-      while subscription = subscriptions.pop()
-        subscription.off()
+    subscriptions.add @editor.onDidChangePath(updateGuideCallback)
+    subscriptions.add @editor.onDidChangeGrammar(updateGuideCallback)
+    subscriptions.add @editor.onDidDestroy ->
+      subscriptions.dispose()
 
   getDefaultColumn: ->
     atom.config.get('editor.preferredLineLength')
@@ -59,4 +50,8 @@ class WrapGuideView extends HTMLElement
     else
       @style.display = 'none'
 
-WrapGuideElement = document.registerElement('wrap-guide', prototype: WrapGuideView.prototype, extends: 'div')
+module.exports =
+document.registerElement('wrap-guide',
+  extends: 'div'
+  prototype: WrapGuideElement.prototype
+)

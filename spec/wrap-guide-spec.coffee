@@ -36,6 +36,8 @@ describe "WrapGuide", ->
       atom.workspace.getActivePane().splitRight(copyActiveItem: true)
       expect(atom.workspace.getPanes().length).toBe 2
       expect(getWrapGuides().length).toBe 2
+      expect(getLeftPosition(getWrapGuides()[0])).toBeGreaterThan(0)
+      expect(getLeftPosition(getWrapGuides()[1])).toBeGreaterThan(0)
 
     it "positions the guide at the configured column", ->
       width = editor.getDefaultCharWidth() * wrapGuide.getDefaultColumn()

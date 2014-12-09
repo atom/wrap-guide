@@ -1,7 +1,7 @@
 {CompositeDisposable} = require 'atom'
 
 class WrapGuideElement extends HTMLDivElement
-  initialize: (@editor) ->
+  initialize: (@editor, @editorElement) ->
     @classList.add('wrap-guide')
     @handleEvents()
     @updateGuide()
@@ -21,6 +21,8 @@ class WrapGuideElement extends HTMLDivElement
     subscriptions.add @editor.onDidChangeGrammar(updateGuideCallback)
     subscriptions.add @editor.onDidDestroy ->
       subscriptions.dispose()
+
+    subscriptions.add @editorElement.onDidAttach updateGuideCallback
 
   getDefaultColumn: ->
     atom.config.get('editor.preferredLineLength')
@@ -44,7 +46,7 @@ class WrapGuideElement extends HTMLDivElement
   updateGuide: ->
     column = @getGuideColumn(@editor.getPath(), @editor.getGrammar().scopeName)
     if column > 0
-      columnWidth = @editor.getDefaultCharWidth() * column
+      columnWidth = @editorElement.getDefaultCharacterWidth() * column
       @style.left = "#{columnWidth}px"
       @style.display = 'block'
     else

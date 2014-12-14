@@ -12,13 +12,13 @@ describe "WrapGuide", ->
     jasmine.attachToDOM(workspaceElement)
 
     waitsForPromise ->
-      atom.workspace.open('sample.js')
-
-    waitsForPromise ->
       atom.packages.activatePackage('wrap-guide')
 
     waitsForPromise ->
       atom.packages.activatePackage('language-javascript')
+
+    waitsForPromise ->
+      atom.workspace.open('sample.js')
 
     runs ->
       editor = atom.workspace.getActiveTextEditor()
@@ -125,3 +125,17 @@ describe "WrapGuide", ->
       width = editor.getDefaultCharWidth() * 20
       expect(width).toBeGreaterThan(0)
       expect(getLeftPosition(wrapGuide)).toBe(width)
+
+  describe "scoped config", ->
+    it "::getDefaultColumn returns the scope-specific column value", ->
+      atom.config.set('.source.js', 'editor.preferredLineLength', 132)
+
+      expect(wrapGuide.getDefaultColumn()).toBe 132
+
+    it 'updates the guide when the scope-specific column changes', ->
+      spyOn(wrapGuide, 'updateGuide')
+
+      column = atom.config.get(editor.getRootScopeDescriptor(), 'editor.preferredLineLength')
+      atom.config.set('.source.js', 'editor.preferredLineLength', column + 10)
+
+      expect(wrapGuide.updateGuide).toHaveBeenCalled()

@@ -126,8 +126,8 @@ describe "WrapGuide", ->
       expect(width).toBeGreaterThan(0)
       expect(getLeftPosition(wrapGuide)).toBe(width)
 
-  describe "scoped config", ->
-    it "::getDefaultColumn returns the scope-specific column value", ->
+  describe 'scoped config', ->
+    it '::getDefaultColumn returns the scope-specific column value', ->
       atom.config.set('.source.js', 'editor.preferredLineLength', 132)
 
       expect(wrapGuide.getDefaultColumn()).toBe 132
@@ -139,3 +139,10 @@ describe "WrapGuide", ->
       atom.config.set('.source.js', 'editor.preferredLineLength', column + 10)
 
       expect(wrapGuide.updateGuide).toHaveBeenCalled()
+
+    it 'updates the guide when wrap-guide.enabled is set to false', ->
+      expect(wrapGuide).toBeVisible()
+
+      atom.config.set('.source.js', 'wrap-guide.enabled', false)
+
+      expect(wrapGuide).not.toBeVisible()

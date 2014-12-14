@@ -14,6 +14,9 @@ class WrapGuideElement extends HTMLDivElement
     subscriptions.add atom.config.onDidChange(@editor.getRootScopeDescriptor(),
                                               'editor.preferredLineLength',
                                               updateGuideCallback)
+    subscriptions.add atom.config.onDidChange(@editor.getRootScopeDescriptor(),
+                                              'wrap-guide.enabled',
+                                              updateGuideCallback)
     subscriptions.add atom.config.onDidChange('wrap-guide.columns', updateGuideCallback)
     subscriptions.add atom.config.onDidChange 'editor.fontSize', =>
       # setTimeout because we need to wait for the editor measurement to happen
@@ -45,9 +48,12 @@ class WrapGuideElement extends HTMLDivElement
         return parseInt(column) if scope is scopeName
     @getDefaultColumn()
 
+  isEnabled: ->
+    atom.config.get(@editor.getRootScopeDescriptor(), 'wrap-guide.enabled') ? true
+
   updateGuide: ->
     column = @getGuideColumn(@editor.getPath(), @editor.getGrammar().scopeName)
-    if column > 0
+    if column > 0 and @isEnabled()
       columnWidth = @editorElement.getDefaultCharacterWidth() * column
       @style.left = "#{columnWidth}px"
       @style.display = 'block'

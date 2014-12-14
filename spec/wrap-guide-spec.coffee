@@ -7,7 +7,7 @@ describe "WrapGuide", ->
   beforeEach ->
     workspaceElement = atom.views.getView(atom.workspace)
     workspaceElement.style.height = "200px"
-    workspaceElement.style.widht = "1500px"
+    workspaceElement.style.width = "1500px"
 
     jasmine.attachToDOM(workspaceElement)
 

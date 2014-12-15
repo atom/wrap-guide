@@ -9,7 +9,21 @@ unset.
 
 ### Configuration
 
-You can customize where the column is placed using the following config option:
+You can customize where the column is placed for different file types by
+opening the Settings View and configuring the "Preferred Line Length" value. If
+you do not want the guide to show for a particular language, that can be set
+using scoped configuration. For example, to turn off the guide for GitHub-
+Flavored Markdown, you can add the following to your `config.cson`:
+
+```coffeescript
+'.source.gfm':
+  'wrap-guide':
+    'enabled': false
+```
+
+The old method of configuring the wrap guide is still available as well, using
+this system you can customize where the column is placed using the following
+config option:
 
 ```coffeescript
 'wrap-guide':

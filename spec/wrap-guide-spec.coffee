@@ -73,7 +73,7 @@ describe "WrapGuide", ->
 
   describe "when the editor's grammar changes", ->
     it "updates the wrap guide position", ->
-      atom.config.set('.source.js', 'editor.preferredLineLength', 20)
+      atom.config.set('editor.preferredLineLength', 20, scopeSelector: '.source.js')
       initial = getLeftPosition(wrapGuide)
       expect(initial).toBeGreaterThan(0)
       expect(wrapGuide).toBeVisible()
@@ -130,22 +130,22 @@ describe "WrapGuide", ->
 
   describe 'scoped config', ->
     it '::getDefaultColumn returns the scope-specific column value', ->
-      atom.config.set('.source.js', 'editor.preferredLineLength', 132)
+      atom.config.set('editor.preferredLineLength', 132, scopeSelector: '.source.js')
 
       expect(wrapGuide.getDefaultColumn()).toBe 132
 
     it 'updates the guide when the scope-specific column changes', ->
       spyOn(wrapGuide, 'updateGuide')
 
-      column = atom.config.get(editor.getRootScopeDescriptor(), 'editor.preferredLineLength')
-      atom.config.set('.source.js', 'editor.preferredLineLength', column + 10)
+      column = atom.config.get('editor.preferredLineLength', scope: editor.getRootScopeDescriptor())
+      atom.config.set('editor.preferredLineLength', column + 10, scope: '.source.js')
 
       expect(wrapGuide.updateGuide).toHaveBeenCalled()
 
     it 'updates the guide when wrap-guide.enabled is set to false', ->
       expect(wrapGuide).toBeVisible()
 
-      atom.config.set('.source.js', 'wrap-guide.enabled', false)
+      atom.config.set('wrap-guide.enabled', false, scopeSelector: '.source.js')
 
       expect(wrapGuide).not.toBeVisible()
 
@@ -160,7 +160,7 @@ describe "WrapGuide", ->
         atom.packages.activatePackage('wrap-guide')
 
       runs ->
-        expect(atom.config.get(['source.gfm'], 'editor.preferredLineLength')).toBe 100
+        expect(atom.config.get('editor.preferredLineLength', scope: ['source.gfm'])).toBe 100
         expect(atom.config.get('wrap-guide.columns')).toBeUndefined()
 
     it 'converts package-specific scoped config of -1 to wrap-guide.enabled = false', ->
@@ -170,7 +170,7 @@ describe "WrapGuide", ->
         atom.packages.activatePackage('wrap-guide')
 
       runs ->
-        expect(atom.config.get(['source.gfm'], 'wrap-guide.enabled')).toBe false
+        expect(atom.config.get('wrap-guide.enabled', scope: ['source.gfm'])).toBe false
         expect(atom.config.get('wrap-guide.columns')).toBeUndefined()
 
     it 'does not convert pattern column settings', ->

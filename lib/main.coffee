@@ -27,9 +27,9 @@ module.exports =
         newColumns.push(customColumn)
       else if scope
         if column is -1
-          atom.config.set(".#{scope}", 'wrap-guide.enabled', false)
+          atom.config.set('wrap-guide.enabled', false, scopeSelector: ".#{scope}")
         else
-          atom.config.set(".#{scope}", 'editor.preferredLineLength', column)
+          atom.config.set('editor.preferredLineLength', column, scopeSelector: ".#{scope}")
 
     newColumns = undefined if newColumns.length is 0
     atom.config.set('wrap-guide.columns', newColumns)

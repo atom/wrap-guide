@@ -174,15 +174,6 @@ describe "WrapGuide", ->
         expect(atom.config.get('wrap-guide.columns')).toBeUndefined()
 
     it 'does not convert pattern column settings', ->
-      atom.config.set('wrap-guide.columns', [{pattern: '\.js$', column: 100}])
-
-      waitsForPromise ->
-        atom.packages.activatePackage('wrap-guide')
-
-      runs ->
-        expect(atom.config.get('wrap-guide.columns')).toEqual [{pattern: '\.js$', column: 100}]
-
-    it 'deprecates pattern column settings', ->
       spyOn(Grim, 'deprecate')
       atom.config.set('wrap-guide.columns', [{pattern: '\.js$', column: 100}])
 
@@ -190,4 +181,5 @@ describe "WrapGuide", ->
         atom.packages.activatePackage('wrap-guide')
 
       runs ->
-        expect(Grim.deprecate).toHaveBeenCalled()
+        expect(atom.config.get('wrap-guide.columns')).toEqual [{pattern: '\.js$', column: 100}]
+        expect(Grim.deprecate.callCount).toBe 1

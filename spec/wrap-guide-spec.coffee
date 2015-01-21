@@ -89,7 +89,7 @@ describe "WrapGuide", ->
       editor.setGrammar(atom.grammars.grammarForScopeName('source.coffee'))
       spyOn(wrapGuide, 'updateGuide')
 
-      atom.config.set('.source.coffee', 'editor.preferredLineLength', 20)
+      atom.config.set('editor.preferredLineLength', 20, scopeSelector: '.source.coffee')
 
       expect(wrapGuide.updateGuide).toHaveBeenCalled()
 
@@ -97,7 +97,7 @@ describe "WrapGuide", ->
       editor.setGrammar(atom.grammars.grammarForScopeName('source.coffee'))
       spyOn(wrapGuide, 'updateGuide')
 
-      atom.config.set('.source.coffee', 'wrap-guide.enabled', false)
+      atom.config.set('wrap-guide.enabled', false, scopeSelecotr: '.source.coffee')
 
       expect(wrapGuide.updateGuide).toHaveBeenCalled()
 

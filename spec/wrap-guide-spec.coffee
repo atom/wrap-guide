@@ -20,6 +20,9 @@ describe "WrapGuide", ->
       atom.packages.activatePackage('language-javascript')
 
     waitsForPromise ->
+      atom.packages.activatePackage('language-coffee-script')
+
+    waitsForPromise ->
       atom.workspace.open('sample.js')
 
     runs ->
@@ -81,6 +84,22 @@ describe "WrapGuide", ->
       editor.setGrammar(atom.grammars.grammarForScopeName('text.plain.null-grammar'))
       expect(getLeftPosition(wrapGuide)).toBeGreaterThan(initial)
       expect(wrapGuide).toBeVisible()
+
+    it 'listens for preferredLineLength updates for the new grammar', ->
+      editor.setGrammar(atom.grammars.grammarForScopeName('source.coffee'))
+      spyOn(wrapGuide, 'updateGuide')
+
+      atom.config.set('.source.coffee', 'editor.preferredLineLength', 20)
+
+      expect(wrapGuide.updateGuide).toHaveBeenCalled()
+
+    it 'listens for wrap-guide.enabled updates for the new grammar', ->
+      editor.setGrammar(atom.grammars.grammarForScopeName('source.coffee'))
+      spyOn(wrapGuide, 'updateGuide')
+
+      atom.config.set('.source.coffee', 'wrap-guide.enabled', false)
+
+      expect(wrapGuide.updateGuide).toHaveBeenCalled()
 
   describe "using a custom config column", ->
     it "places the wrap guide at the custom column", ->

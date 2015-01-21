@@ -11,6 +11,27 @@ class WrapGuideElement extends HTMLDivElement
     updateGuideCallback = => @updateGuide()
 
     subscriptions = new CompositeDisposable
+    configSubscriptions = @handleConfigEvents()
+    subscriptions.add atom.config.onDidChange('wrap-guide.columns', updateGuideCallback)
+    subscriptions.add atom.config.onDidChange 'editor.fontSize', =>
+      # setTimeout because we need to wait for the editor measurement to happen
+      setTimeout(updateGuideCallback, 0)
+
+    subscriptions.add @editor.onDidChangePath(updateGuideCallback)
+    subscriptions.add @editor.onDidChangeGrammar =>
+      configSubscriptions.dispose()
+      configSubscriptions = @handleConfigEvents()
+      updateGuideCallback()
+
+    subscriptions.add @editor.onDidDestroy ->
+      subscriptions.dispose()
+      configSubscriptions.dispose()
+
+    subscriptions.add @editorElement.onDidAttach updateGuideCallback
+
+  handleConfigEvents: ->
+    updateGuideCallback = => @updateGuide()
+    subscriptions = new CompositeDisposable
     subscriptions.add atom.config.onDidChange(
       'editor.preferredLineLength',
       scope: @editor.getRootScopeDescriptor(),
@@ -21,17 +42,7 @@ class WrapGuideElement extends HTMLDivElement
       scope: @editor.getRootScopeDescriptor(),
       updateGuideCallback
     )
-    subscriptions.add atom.config.onDidChange('wrap-guide.columns', updateGuideCallback)
-    subscriptions.add atom.config.onDidChange 'editor.fontSize', =>
-      # setTimeout because we need to wait for the editor measurement to happen
-      setTimeout(updateGuideCallback, 0)
-
-    subscriptions.add @editor.onDidChangePath(updateGuideCallback)
-    subscriptions.add @editor.onDidChangeGrammar(updateGuideCallback)
-    subscriptions.add @editor.onDidDestroy ->
-      subscriptions.dispose()
-
-    subscriptions.add @editorElement.onDidAttach updateGuideCallback
+    subscriptions
 
   getDefaultColumn: ->
     atom.config.get('editor.preferredLineLength', scope: @editor.getRootScopeDescriptor())

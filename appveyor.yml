@@ -14,12 +14,12 @@ init:
 install:
   - cinst atom
   - cd %APPVEYOR_BUILD_FOLDER%
-  - %LOCALAPPDATA/atom/bin/apm install
+  - %LOCALAPPDATA%/atom/bin/apm install
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
-  - %LOCALAPPDATA/atom/bin/apm test
+  - %LOCALAPPDATA%/atom/bin/apm test
 
 # to disable automatic tests
 test: off

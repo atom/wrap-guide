@@ -5,4 +5,4 @@ notifications:
     on_success: never
     on_failure: change
 
-script: 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
+script: 'curl -s https://gist.githubusercontent.com/kevinsawicki/7ea2f92593ef995a059c/raw/c08d9bc7e3f5b67e16ecf4b6437fce7e9cf6c3e6/build.sh | sh'

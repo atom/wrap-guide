@@ -18,7 +18,7 @@ module.exports =
     newColumns = []
     for customColumn in customColumns when typeof customColumn is 'object'
       {pattern, scope, column} = customColumn
-      if pattern
+      if Grim.includeDeprecatedAPIs and pattern
         Grim.deprecate """
           The Wrap Guide package uses Atom's new language-specific configuration.
           Use of file name matching patterns for Wrap Guide configuration is deprecated.

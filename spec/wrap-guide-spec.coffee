@@ -27,11 +27,15 @@ describe "WrapGuide", ->
 
     runs ->
       editor = atom.workspace.getActiveTextEditor()
-      wrapGuide = workspaceElement.querySelector(".wrap-guide")
+      wrapGuide = atom.views.getView(editor).rootElement.querySelector(".wrap-guide")
 
   describe ".activate", ->
     getWrapGuides  = ->
-      workspaceElement.querySelectorAll(".underlayer > .wrap-guide")
+      wrapGuides = []
+      atom.workspace.getTextEditors().forEach (editor) ->
+        guide = atom.views.getView(editor).rootElement.querySelector(".wrap-guide")
+        wrapGuides.push(guide) if guide
+      wrapGuides
 
     it "appends a wrap guide to all existing and new editors", ->
       expect(atom.workspace.getPanes().length).toBe 1

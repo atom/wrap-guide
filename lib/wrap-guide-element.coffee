@@ -3,9 +3,15 @@
 class WrapGuideElement extends HTMLDivElement
   initialize: (@editor, @editorElement) ->
     @classList.add('wrap-guide')
+    @attachToLines()
     @handleEvents()
     @updateGuide()
+
     this
+
+  attachToLines: ->
+    lines = @editorElement.rootElement?.querySelector?('.lines')
+    lines?.appendChild(this)
 
   handleEvents: ->
     updateGuideCallback = => @updateGuide()
@@ -27,7 +33,9 @@ class WrapGuideElement extends HTMLDivElement
       subscriptions.dispose()
       configSubscriptions.dispose()
 
-    subscriptions.add @editorElement.onDidAttach updateGuideCallback
+    subscriptions.add @editorElement.onDidAttach =>
+      @attachToLines()
+      updateGuideCallback()
 
   handleConfigEvents: ->
     updateGuideCallback = => @updateGuide()

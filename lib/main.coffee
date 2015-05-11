@@ -9,7 +9,6 @@ module.exports =
     atom.workspace.observeTextEditors (editor) ->
       editorElement = atom.views.getView(editor)
       wrapGuideElement = new WrapGuideElement().initialize(editor, editorElement)
-      editorElement.querySelector(".underlayer")?.appendChild(wrapGuideElement)
 
   updateConfiguration: ->
     customColumns = atom.config.get('wrap-guide.columns')

@@ -171,38 +171,3 @@ describe "WrapGuide", ->
       atom.config.set('wrap-guide.enabled', false, scopeSelector: '.source.js')
 
       expect(wrapGuide).not.toBeVisible()
-
-  describe 'converting old configuration', ->
-    beforeEach ->
-      atom.packages.deactivatePackage('wrap-guide')
-
-    it 'converts old package-specific scoped config to new Atom style', ->
-      atom.config.set('wrap-guide.columns', [{scope: 'source.gfm', column: 100}])
-
-      waitsForPromise ->
-        atom.packages.activatePackage('wrap-guide')
-
-      runs ->
-        expect(atom.config.get('editor.preferredLineLength', scope: ['source.gfm'])).toBe 100
-        expect(atom.config.get('wrap-guide.columns')).toBeUndefined()
-
-    it 'converts package-specific scoped config of -1 to wrap-guide.enabled = false', ->
-      atom.config.set('wrap-guide.columns', [{scope: 'source.gfm', column: -1}])
-
-      waitsForPromise ->
-        atom.packages.activatePackage('wrap-guide')
-
-      runs ->
-        expect(atom.config.get('wrap-guide.enabled', scope: ['source.gfm'])).toBe false
-        expect(atom.config.get('wrap-guide.columns')).toBeUndefined()
-
-    it 'does not convert pattern column settings', ->
-      spyOn(Grim, 'deprecate')
-      atom.config.set('wrap-guide.columns', [{pattern: '\.js$', column: 100}])
-
-      waitsForPromise ->
-        atom.packages.activatePackage('wrap-guide')
-
-      runs ->
-        expect(atom.config.get('wrap-guide.columns')).toEqual [{pattern: '\.js$', column: 100}]
-        expect(Grim.deprecate.callCount).toBe 1

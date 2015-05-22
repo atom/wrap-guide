@@ -30,7 +30,7 @@ It is possible to configure the color and/or width of the line by adding the
 following CSS/LESS to your `styles.less`:
 
 ```css
-.wrap-guide {
+atom-text-editor::shadow .wrap-guide {
   width: 10px;
   background-color: red;
 }

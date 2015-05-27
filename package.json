@@ -10,5 +10,8 @@
   },
   "dependencies": {
     "grim": "^1.2.1"
+  },
+  "devDependencies": {
+    "coffeelint": "^1.9.7"
   }
 }

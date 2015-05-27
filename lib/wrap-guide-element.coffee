@@ -19,7 +19,7 @@ class WrapGuideElement extends HTMLDivElement
     subscriptions = new CompositeDisposable
     configSubscriptions = @handleConfigEvents()
     subscriptions.add atom.config.onDidChange('wrap-guide.columns', updateGuideCallback)
-    subscriptions.add atom.config.onDidChange 'editor.fontSize', =>
+    subscriptions.add atom.config.onDidChange 'editor.fontSize', ->
       # setTimeout because we need to wait for the editor measurement to happen
       setTimeout(updateGuideCallback, 0)
 

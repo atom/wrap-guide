@@ -78,18 +78,20 @@ describe "WrapGuide", ->
       expect(getLeftPosition(wrapGuide)).toBeLessThan(initial)
       expect(wrapGuide).toBeVisible()
 
-  describe "when the editor's scroll left changes", ->
-    it "updates the wrap guide position to a relative position on screen", ->
-      editor.setText("a long line which causes the editor to scroll")
-      editor.setWidth(100)
+  # FIXME: remove conditional as soon as the tiled editor is released.
+  if atom.hasTiledEditor
+    describe "when the editor's scroll left changes", ->
+      it "updates the wrap guide position to a relative position on screen", ->
+        editor.setText("a long line which causes the editor to scroll")
+        editor.setWidth(100)
 
-      initial = getLeftPosition(wrapGuide)
-      expect(initial).toBeGreaterThan(0)
+        initial = getLeftPosition(wrapGuide)
+        expect(initial).toBeGreaterThan(0)
 
-      editor.setScrollLeft(10)
+        editor.setScrollLeft(10)
 
-      expect(getLeftPosition(wrapGuide)).toBe(initial - 10)
-      expect(wrapGuide).toBeVisible()
+        expect(getLeftPosition(wrapGuide)).toBe(initial - 10)
+        expect(wrapGuide).toBeVisible()
 
   describe "when the editor's grammar changes", ->
     it "updates the wrap guide position", ->

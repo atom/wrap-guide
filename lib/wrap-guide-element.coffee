@@ -23,7 +23,10 @@ class WrapGuideElement extends HTMLDivElement
       # setTimeout because we need to wait for the editor measurement to happen
       setTimeout(updateGuideCallback, 0)
 
-    subscriptions.add @editor.onDidChangeScrollLeft(updateGuideCallback)
+    # FIXME: remove conditional as soon as the tiled editor is released.
+    if atom.hasTiledEditor
+      subscriptions.add @editor.onDidChangeScrollLeft(updateGuideCallback)
+
     subscriptions.add @editor.onDidChangePath(updateGuideCallback)
     subscriptions.add @editor.onDidChangeGrammar =>
       configSubscriptions.dispose()
@@ -79,7 +82,8 @@ class WrapGuideElement extends HTMLDivElement
     column = @getGuideColumn(@editor.getPath(), @editor.getGrammar().scopeName)
     if column > 0 and @isEnabled()
       columnWidth = @editorElement.getDefaultCharacterWidth() * column
-      columnWidth -= @editor.getScrollLeft()
+      # FIXME: remove conditional as soon as the tiled editor is released.
+      columnWidth -= @editor.getScrollLeft() if atom.hasTiledEditor
       @style.left = "#{columnWidth}px"
       @style.display = 'block'
     else

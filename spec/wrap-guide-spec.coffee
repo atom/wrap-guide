@@ -1,7 +1,7 @@
 Grim = require 'grim'
 
 describe "WrapGuide", ->
-  [editor, wrapGuide, workspaceElement] = []
+  [editor, editorElement, wrapGuide, workspaceElement] = []
 
   getLeftPosition = (element) ->
     parseInt(element.style.left)
@@ -27,7 +27,8 @@ describe "WrapGuide", ->
 
     runs ->
       editor = atom.workspace.getActiveTextEditor()
-      wrapGuide = atom.views.getView(editor).rootElement.querySelector(".wrap-guide")
+      editorElement = atom.views.getView(editor)
+      wrapGuide = editorElement.rootElement.querySelector(".wrap-guide")
 
   describe ".activate", ->
     getWrapGuides  = ->
@@ -76,6 +77,22 @@ describe "WrapGuide", ->
 
       atom.config.set("wrap-guide.columns", [{pattern: ".*", column: column - 10}])
       expect(getLeftPosition(wrapGuide)).toBeLessThan(initial)
+      expect(wrapGuide).toBeVisible()
+
+  describe "when the editor's scroll left changes", ->
+    it "updates the wrap guide position to a relative position on screen", ->
+      # FIXME: remove conditional as soon as the tiled editor is released.
+      return unless editorElement.hasTiledRendering
+
+      editor.setText("a long line which causes the editor to scroll")
+      editor.setWidth(100)
+
+      initial = getLeftPosition(wrapGuide)
+      expect(initial).toBeGreaterThan(0)
+
+      editor.setScrollLeft(10)
+
+      expect(getLeftPosition(wrapGuide)).toBe(initial - 10)
       expect(wrapGuide).toBeVisible()
 
   describe "when the editor's grammar changes", ->

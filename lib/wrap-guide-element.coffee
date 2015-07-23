@@ -6,6 +6,7 @@ class WrapGuideElement extends HTMLDivElement
     @attachToLines()
     @handleEvents()
     @updateGuide()
+    @setTooltip()
 
     this
 
@@ -88,6 +89,9 @@ class WrapGuideElement extends HTMLDivElement
       @style.display = 'block'
     else
       @style.display = 'none'
+
+  setTooltip: ->
+    @title = "This is the wrap guide."
 
 module.exports =
 document.registerElement('wrap-guide',

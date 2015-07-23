@@ -1,14 +1,26 @@
+{CompositeDisposable} = require 'atom'
 Grim = require 'grim'
 
 WrapGuideElement = require './wrap-guide-element'
 
 module.exports =
+  config:
+    enabled:
+      type: 'boolean'
+      default: true
+
   activate: ->
     @updateConfiguration()
 
     atom.workspace.observeTextEditors (editor) ->
       editorElement = atom.views.getView(editor)
       wrapGuideElement = new WrapGuideElement().initialize(editor, editorElement)
+
+    @subscriptions = new CompositeDisposable
+    @subscriptions.add atom.commands.add 'atom-workspace', 'wrap-guide:toggle': => @toggle()
+
+  deactivate: ->
+    @subscriptions.dispose()
 
   updateConfiguration: ->
     customColumns = atom.config.get('wrap-guide.columns')
@@ -32,3 +44,7 @@ module.exports =
 
     newColumns = undefined if newColumns.length is 0
     atom.config.set('wrap-guide.columns', newColumns)
+
+  toggle: ->
+    currentState = atom.config.get('wrap-guide.enabled')
+    atom.config.set('wrap-guide.enabled', not currentState)

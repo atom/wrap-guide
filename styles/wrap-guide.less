@@ -7,6 +7,15 @@ atom-text-editor::shadow {
     z-index: 3;
     position: absolute;
     top: 0;
-    background-color: @syntax-wrap-guide-color;
+    background-color: transparent;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      box-sizing: border-box;
+      border-left: 1px dotted @syntax-wrap-guide-color;
+    }
   }
 }

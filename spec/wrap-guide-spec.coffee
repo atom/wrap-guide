@@ -55,6 +55,11 @@ describe "WrapGuide", ->
       expect(getLeftPosition(wrapGuide)).toBe(width)
       expect(wrapGuide).toBeVisible()
 
+    it "adds a tooltip to the wrap guide", ->
+      tooltipBody = wrapGuide.title
+      expect(tooltipBody).toBe "This line is the wrap-guide. You can quickly toggle it via the
+        command palette."
+
   describe "when the font size changes", ->
     it "updates the wrap guide position", ->
       initial = getLeftPosition(wrapGuide)

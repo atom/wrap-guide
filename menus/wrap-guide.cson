@@ -1,0 +1,7 @@
+'menu': [
+  'label': 'View'
+  'submenu': [
+    'label': 'Toggle Wrap Guide'
+    'command': 'wrap-guide:toggle'
+  ]
+]

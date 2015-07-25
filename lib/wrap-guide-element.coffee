@@ -91,7 +91,7 @@ class WrapGuideElement extends HTMLDivElement
       @style.display = 'none'
 
   setTooltip: ->
-    @title = "This line is the wrap-guide. You can quickly toggle it via the command palette."
+    @title = "This line is the wrap-guide. You can quickly toggle it via the View menu."
 
 module.exports =
 document.registerElement('wrap-guide',

@@ -188,3 +188,20 @@ describe "WrapGuide", ->
       atom.config.set('wrap-guide.enabled', false, scopeSelector: '.source.js')
 
       expect(wrapGuide).not.toBeVisible()
+
+  describe "toogle command", ->
+    it "hides the guide when it was initially enabled and visible", ->
+      atom.config.set('wrap-guide.enabled', true)
+      expect(wrapGuide).toBeVisible()
+
+      atom.commands.dispatch(workspaceElement, 'wrap-guide:toggle')
+      expect(wrapGuide).toBeHidden()
+      expect(atom.config.get('wrap-guide.enabled')).toBe false
+
+    it "shows the guide when it was initially disabled and not visible", ->
+      atom.config.set('wrap-guide.enabled', false)
+      expect(wrapGuide).toBeHidden()
+
+      atom.commands.dispatch(workspaceElement, 'wrap-guide:toggle')
+      expect(wrapGuide).toBeVisible()
+      expect(atom.config.get('wrap-guide.enabled')).toBe true

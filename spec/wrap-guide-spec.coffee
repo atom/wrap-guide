@@ -85,12 +85,12 @@ describe "WrapGuide", ->
       return unless editorElement.hasTiledRendering
 
       editor.setText("a long line which causes the editor to scroll")
-      editor.setWidth(100)
+      editorElement.setWidth(100)
 
       initial = getLeftPosition(wrapGuide)
       expect(initial).toBeGreaterThan(0)
 
-      editor.setScrollLeft(10)
+      editorElement.setScrollLeft(10)
 
       expect(getLeftPosition(wrapGuide)).toBe(initial - 10)
       expect(wrapGuide).toBeVisible()

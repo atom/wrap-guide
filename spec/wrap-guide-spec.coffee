@@ -1,5 +1,7 @@
 Grim = require 'grim'
 
+# TODO: remove references to logical display buffer when it is released.
+
 describe "WrapGuide", ->
   [editor, editorElement, wrapGuide, workspaceElement] = []
 
@@ -81,16 +83,19 @@ describe "WrapGuide", ->
 
   describe "when the editor's scroll left changes", ->
     it "updates the wrap guide position to a relative position on screen", ->
-      # FIXME: remove conditional as soon as the tiled editor is released.
-      return unless editorElement.hasTiledRendering
-
       editor.setText("a long line which causes the editor to scroll")
-      editorElement.setWidth(100)
+      if editorElement.logicalDisplayBuffer
+        editorElement.setWidth(100)
+      else
+        editor.setWidth(100)
 
       initial = getLeftPosition(wrapGuide)
       expect(initial).toBeGreaterThan(0)
 
-      editorElement.setScrollLeft(10)
+      if editorElement.logicalDisplayBuffer
+        editorElement.setScrollLeft(10)
+      else
+        editor.setScrollLeft(10)
 
       expect(getLeftPosition(wrapGuide)).toBe(initial - 10)
       expect(wrapGuide).toBeVisible()

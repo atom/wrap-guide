@@ -1,6 +1,6 @@
 {
   "name": "wrap-guide",
-  "version": "0.36.0",
+  "version": "0.37.0",
   "main": "./lib/main",
   "description": "Displays a vertical line at the 80th character in the editor.\nThis packages uses the config value of `editor.preferredLineLength` when set.",
   "license": "MIT",

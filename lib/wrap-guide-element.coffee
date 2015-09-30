@@ -1,5 +1,7 @@
 {CompositeDisposable} = require 'atom'
 
+# TODO: remove references to logical display buffer when it is released.
+
 class WrapGuideElement extends HTMLDivElement
   initialize: (@editor, @editorElement) ->
     @classList.add('wrap-guide')
@@ -23,8 +25,9 @@ class WrapGuideElement extends HTMLDivElement
       # setTimeout because we need to wait for the editor measurement to happen
       setTimeout(updateGuideCallback, 0)
 
-    # FIXME: remove conditional as soon as the tiled editor is released.
-    if @editorElement.hasTiledRendering
+    if @editorElement.logicalDisplayBuffer
+      subscriptions.add @editorElement.onDidChangeScrollLeft(updateGuideCallback)
+    else
       subscriptions.add @editor.onDidChangeScrollLeft(updateGuideCallback)
 
     subscriptions.add @editor.onDidChangePath(updateGuideCallback)
@@ -82,8 +85,10 @@ class WrapGuideElement extends HTMLDivElement
     column = @getGuideColumn(@editor.getPath(), @editor.getGrammar().scopeName)
     if column > 0 and @isEnabled()
       columnWidth = @editorElement.getDefaultCharacterWidth() * column
-      # FIXME: remove conditional as soon as the tiled editor is released.
-      columnWidth -= @editor.getScrollLeft() if @editorElement.hasTiledRendering
+      if @editorElement.logicalDisplayBuffer
+        columnWidth -= @editorElement.getScrollLeft()
+      else
+        columnWidth -= @editor.getScrollLeft()
       @style.left = "#{columnWidth}px"
       @style.display = 'block'
     else

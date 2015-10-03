@@ -89,7 +89,7 @@ class WrapGuideElement extends HTMLDivElement
         columnWidth -= @editorElement.getScrollLeft()
       else
         columnWidth -= @editor.getScrollLeft()
-      @style.left = "#{columnWidth}px"
+      @style.left = "#{Math.round(columnWidth)}px"
       @style.display = 'block'
     else
       @style.display = 'none'

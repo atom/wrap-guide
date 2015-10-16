@@ -54,7 +54,7 @@ describe "WrapGuide", ->
     it "positions the guide at the configured column", ->
       width = editor.getDefaultCharWidth() * wrapGuide.getDefaultColumn()
       expect(width).toBeGreaterThan(0)
-      expect(getLeftPosition(wrapGuide)).toBeCloseTo width, 0
+      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan 1
       expect(wrapGuide).toBeVisible()
 
   describe "when the font size changes", ->
@@ -133,14 +133,14 @@ describe "WrapGuide", ->
       wrapGuide.updateGuide()
       width = editor.getDefaultCharWidth() * 20
       expect(width).toBeGreaterThan(0)
-      expect(getLeftPosition(wrapGuide)).toBeCloseTo width, 0
+      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan 1
 
     it "uses the default column when no custom column matches the path", ->
       atom.config.set('wrap-guide.columns', [{pattern: '\.jsp$', column: '100'}])
       wrapGuide.updateGuide()
       width = editor.getDefaultCharWidth() * wrapGuide.getDefaultColumn()
       expect(width).toBeGreaterThan(0)
-      expect(getLeftPosition(wrapGuide)).toBeCloseTo width, 0
+      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan 1
 
     it "hides the guide when the config column is less than 1", ->
       atom.config.set('wrap-guide.columns', [{pattern: 'sample\.js$', column: -1}])
@@ -156,14 +156,14 @@ describe "WrapGuide", ->
       wrapGuide.updateGuide()
       width = editor.getDefaultCharWidth() * 20
       expect(width).toBeGreaterThan(0)
-      expect(getLeftPosition(wrapGuide)).toBeCloseTo width, 0
+      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan 1
 
     it "uses the default column when no scope name matches", ->
       atom.config.set('wrap-guide.columns', [{scope: 'source.gfm', column: '100'}])
       wrapGuide.updateGuide()
       width = editor.getDefaultCharWidth() * wrapGuide.getDefaultColumn()
       expect(width).toBeGreaterThan(0)
-      expect(getLeftPosition(wrapGuide)).toBeCloseTo width, 0
+      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan 1
 
     it "favors the first matching rule", ->
       atom.config.set('wrap-guide.columns', [{pattern: '\.js$', column: 20},
@@ -171,7 +171,7 @@ describe "WrapGuide", ->
       wrapGuide.updateGuide()
       width = editor.getDefaultCharWidth() * 20
       expect(width).toBeGreaterThan(0)
-      expect(getLeftPosition(wrapGuide)).toBeCloseTo width, 0
+      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan 1
 
   describe 'scoped config', ->
     it '::getDefaultColumn returns the scope-specific column value', ->

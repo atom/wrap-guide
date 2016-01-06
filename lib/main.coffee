@@ -8,7 +8,7 @@ module.exports =
 
     initializedEditors = new WeakSet()
     atom.workspace.observeTextEditors (editor) ->
-      if !initializedEditors.has(editor)
+      if not initializedEditors.has(editor)
         initializedEditors.add(editor)
         editorElement = atom.views.getView(editor)
         wrapGuideElement = new WrapGuideElement().initialize(editor, editorElement)

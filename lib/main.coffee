@@ -6,9 +6,12 @@ module.exports =
   activate: ->
     @updateConfiguration()
 
+    initializedEditors = new WeakSet()
     atom.workspace.observeTextEditors (editor) ->
-      editorElement = atom.views.getView(editor)
-      wrapGuideElement = new WrapGuideElement().initialize(editor, editorElement)
+      if !initializedEditors.has(editor)
+        initializedEditors.add(editor)
+        editorElement = atom.views.getView(editor)
+        wrapGuideElement = new WrapGuideElement().initialize(editor, editorElement)
 
   updateConfiguration: ->
     customColumns = atom.config.get('wrap-guide.columns')

@@ -1,7 +1,6 @@
 # Wrap Guide package
 
 [![Build Status](https://travis-ci.org/atom/wrap-guide.svg?branch=master)](https://travis-ci.org/atom/wrap-guide)
-[![Build status](https://ci.appveyor.com/api/projects/status/k9snd0hc2bh7s1hp/branch/master)](https://ci.appveyor.com/project/kevinsawicki/wrap-guide/branch/master)
 
 The `wrap-guide` package places a vertical line in each editor at a certain
 column to guide your formatting, so lines do not exceed a certain width.

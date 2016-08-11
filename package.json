@@ -8,6 +8,20 @@
   "engines": {
     "atom": "*"
   },
+  "configSchema": {
+    "guides": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "description": "Display guides at each of the listed character widths. Leave blank for one guide at your `editor.preferredLineLength`."
+    },
+    "enabled": {
+      "default": true,
+      "type": "boolean"
+    }
+  },
   "devDependencies": {
     "coffeelint": "^1.9.7"
   }

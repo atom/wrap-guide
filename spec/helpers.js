@@ -1,4 +1,4 @@
-module.exports = {
+const helpers = {
   getWrapGuides () {
     wrapGuides = []
     for (const editor of atom.workspace.getTextEditors()) {
@@ -10,5 +10,11 @@ module.exports = {
 
   getLeftPosition (element) {
     return parseInt(element.style.left)
+  },
+
+  getLeftPositions (elements) {
+    return Array.prototype.map.call(elements, element => helpers.getLeftPosition(element))
   }
 }
+
+module.exports = helpers

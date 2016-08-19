@@ -29,14 +29,14 @@ describe "WrapGuide", ->
 
     runs ->
       editor = atom.workspace.getActiveTextEditor()
-      editorElement = atom.views.getView(editor)
+      editorElement = editor.getElement()
       wrapGuide = editorElement.rootElement.querySelector(".wrap-guide")
 
   describe ".activate", ->
     getWrapGuides  = ->
       wrapGuides = []
       atom.workspace.getTextEditors().forEach (editor) ->
-        guide = atom.views.getView(editor).rootElement.querySelector(".wrap-guide")
+        guide = editor.getElement().rootElement.querySelector(".wrap-guide")
         wrapGuides.push(guide) if guide
       wrapGuides
 

@@ -29,14 +29,14 @@ describe "WrapGuide", ->
 
     runs ->
       editor = atom.workspace.getActiveTextEditor()
-      editorElement = atom.views.getView(editor)
+      editorElement = editor.getElement()
       wrapGuide = editorElement.rootElement.querySelector(".wrap-guide")
 
   describe ".activate", ->
     getWrapGuides  = ->
       wrapGuides = []
       atom.workspace.getTextEditors().forEach (editor) ->
-        guide = atom.views.getView(editor).rootElement.querySelector(".wrap-guide")
+        guide = editor.getElement().rootElement.querySelector(".wrap-guide")
         wrapGuides.push(guide) if guide
       wrapGuides
 
@@ -84,19 +84,11 @@ describe "WrapGuide", ->
   describe "when the editor's scroll left changes", ->
     it "updates the wrap guide position to a relative position on screen", ->
       editor.setText("a long line which causes the editor to scroll")
-      if editorElement.logicalDisplayBuffer
-        editorElement.setWidth(100)
-      else
-        editor.setWidth(100)
-
+      editorElement.style.width = "100px"
+      atom.views.performDocumentPoll()
       initial = getLeftPosition(wrapGuide)
       expect(initial).toBeGreaterThan(0)
-
-      if editorElement.logicalDisplayBuffer
-        editorElement.setScrollLeft(10)
-      else
-        editor.setScrollLeft(10)
-
+      editorElement.setScrollLeft(10)
       expect(getLeftPosition(wrapGuide)).toBe(initial - 10)
       expect(wrapGuide).toBeVisible()
 

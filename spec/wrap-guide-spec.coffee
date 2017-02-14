@@ -83,14 +83,21 @@ describe "WrapGuide", ->
 
   describe "when the editor's scroll left changes", ->
     it "updates the wrap guide position to a relative position on screen", ->
+      spyOn(editorElement.component, 'measureDimensions').andCallThrough()
       editor.setText("a long line which causes the editor to scroll")
       editorElement.style.width = "100px"
-      atom.views.performDocumentPoll()
-      initial = getLeftPosition(wrapGuide)
-      expect(initial).toBeGreaterThan(0)
-      editorElement.setScrollLeft(10)
-      expect(getLeftPosition(wrapGuide)).toBe(initial - 10)
-      expect(wrapGuide).toBeVisible()
+
+      if atom.views.performDocumentPoll # TODO: Remove this branch once atom.views.performDocumentPoll is gone
+        atom.views.performDocumentPoll()
+      else
+        waitsFor -> editorElement.component.measureDimensions.callCount > 0
+
+      runs ->
+        initial = getLeftPosition(wrapGuide)
+        expect(initial).toBeGreaterThan(0)
+        editorElement.setScrollLeft(10)
+        expect(getLeftPosition(wrapGuide)).toBe(initial - 10)
+        expect(wrapGuide).toBeVisible()
 
   describe "when the editor's grammar changes", ->
     it "updates the wrap guide position", ->

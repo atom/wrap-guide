@@ -112,19 +112,15 @@ describe "WrapGuide", ->
 
     it 'listens for preferredLineLength updates for the new grammar', ->
       editor.setGrammar(atom.grammars.grammarForScopeName('source.coffee'))
-      spyOn(wrapGuide, 'updateGuide')
-
+      initial = getLeftPosition(wrapGuide)
       atom.config.set('editor.preferredLineLength', 20, scopeSelector: '.source.coffee')
-
-      expect(wrapGuide.updateGuide).toHaveBeenCalled()
+      expect(getLeftPosition(wrapGuide)).toBeLessThan(initial)
 
     it 'listens for wrap-guide.enabled updates for the new grammar', ->
       editor.setGrammar(atom.grammars.grammarForScopeName('source.coffee'))
-      spyOn(wrapGuide, 'updateGuide')
-
-      atom.config.set('wrap-guide.enabled', false, scopeSelecotr: '.source.coffee')
-
-      expect(wrapGuide.updateGuide).toHaveBeenCalled()
+      expect(wrapGuide).toBeVisible()
+      atom.config.set('wrap-guide.enabled', false, scopeSelector: '.source.coffee')
+      expect(wrapGuide).not.toBeVisible()
 
   describe "using a custom config column", ->
     it "places the wrap guide at the custom column", ->
@@ -179,12 +175,10 @@ describe "WrapGuide", ->
       expect(wrapGuide.getDefaultColumn()).toBe 132
 
     it 'updates the guide when the scope-specific column changes', ->
-      spyOn(wrapGuide, 'updateGuide')
-
+      initial = getLeftPosition(wrapGuide)
       column = atom.config.get('editor.preferredLineLength', scope: editor.getRootScopeDescriptor())
       atom.config.set('editor.preferredLineLength', column + 10, scope: '.source.js')
-
-      expect(wrapGuide.updateGuide).toHaveBeenCalled()
+      expect(getLeftPosition(wrapGuide)).toBeGreaterThan(initial)
 
     it 'updates the guide when wrap-guide.enabled is set to false', ->
       expect(wrapGuide).toBeVisible()

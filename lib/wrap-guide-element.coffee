@@ -1,19 +1,21 @@
 {CompositeDisposable} = require 'atom'
 
-# TODO: remove references to logical display buffer when it is released.
-
-class WrapGuideElement extends HTMLDivElement
-  initialize: (@editor, @editorElement) ->
-    @classList.add('wrap-guide')
+module.exports =
+class WrapGuideElement
+  constructor: (@editor, @editorElement) ->
+    @element = document.createElement('div')
+    @element.setAttribute('is', 'wrap-guide')
+    @element.classList.add('wrap-guide')
     @attachToLines()
     @handleEvents()
     @updateGuide()
 
-    this
+    @element.updateGuide = @updateGuide.bind(this)
+    @element.getDefaultColumn = @getDefaultColumn.bind(this)
 
   attachToLines: ->
     lines = @editorElement.rootElement?.querySelector?('.lines')
-    lines?.appendChild(this)
+    lines?.appendChild(@element)
 
   handleEvents: ->
     updateGuideCallback = => @updateGuide()
@@ -25,11 +27,7 @@ class WrapGuideElement extends HTMLDivElement
       # setTimeout because we need to wait for the editor measurement to happen
       setTimeout(updateGuideCallback, 0)
 
-    if @editorElement.logicalDisplayBuffer
-      subscriptions.add @editorElement.onDidChangeScrollLeft(updateGuideCallback)
-    else
-      subscriptions.add @editor.onDidChangeScrollLeft(updateGuideCallback)
-
+    subscriptions.add @editorElement.onDidChangeScrollLeft(updateGuideCallback)
     subscriptions.add @editor.onDidChangePath(updateGuideCallback)
     subscriptions.add @editor.onDidChangeGrammar =>
       configSubscriptions.dispose()
@@ -85,17 +83,8 @@ class WrapGuideElement extends HTMLDivElement
     column = @getGuideColumn(@editor.getPath(), @editor.getGrammar().scopeName)
     if column > 0 and @isEnabled()
       columnWidth = @editorElement.getDefaultCharacterWidth() * column
-      if @editorElement.logicalDisplayBuffer
-        columnWidth -= @editorElement.getScrollLeft()
-      else
-        columnWidth -= @editor.getScrollLeft()
-      @style.left = "#{Math.round(columnWidth)}px"
-      @style.display = 'block'
+      columnWidth -= @editorElement.getScrollLeft()
+      @element.style.left = "#{Math.round(columnWidth)}px"
+      @element.style.display = 'block'
     else
-      @style.display = 'none'
-
-module.exports =
-document.registerElement('wrap-guide',
-  extends: 'div'
-  prototype: WrapGuideElement.prototype
-)
+      @element.style.display = 'none'

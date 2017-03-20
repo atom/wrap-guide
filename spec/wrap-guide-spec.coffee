@@ -41,12 +41,12 @@ describe "WrapGuide", ->
       wrapGuides
 
     it "appends a wrap guide to all existing and new editors", ->
-      expect(atom.workspace.getPanes().length).toBe 1
+      expect(atom.workspace.getTextEditors().length).toBe 1
       expect(getWrapGuides().length).toBe 1
       expect(getLeftPosition(getWrapGuides()[0])).toBeGreaterThan(0)
 
       atom.workspace.getActivePane().splitRight(copyActiveItem: true)
-      expect(atom.workspace.getPanes().length).toBe 2
+      expect(atom.workspace.getTextEditors().length).toBe 2
       expect(getWrapGuides().length).toBe 2
       expect(getLeftPosition(getWrapGuides()[0])).toBeGreaterThan(0)
       expect(getLeftPosition(getWrapGuides()[1])).toBeGreaterThan(0)

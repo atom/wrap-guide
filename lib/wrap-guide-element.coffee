@@ -14,8 +14,8 @@ class WrapGuideElement
     @element.getDefaultColumn = @getDefaultColumn.bind(this)
 
   attachToLines: ->
-    lines = @editorElement.rootElement?.querySelector?('.lines')
-    lines?.appendChild(@element)
+    scrollView = @editorElement.querySelector('.scroll-view')
+    scrollView?.appendChild(@element)
 
   handleEvents: ->
     updateGuideCallback = => @updateGuide()

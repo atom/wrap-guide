@@ -30,13 +30,13 @@ describe "WrapGuide", ->
     runs ->
       editor = atom.workspace.getActiveTextEditor()
       editorElement = editor.getElement()
-      wrapGuide = editorElement.rootElement.querySelector(".wrap-guide")
+      wrapGuide = editorElement.querySelector(".wrap-guide")
 
   describe ".activate", ->
     getWrapGuides  = ->
       wrapGuides = []
       atom.workspace.getTextEditors().forEach (editor) ->
-        guide = editor.getElement().rootElement.querySelector(".wrap-guide")
+        guide = editor.getElement().querySelector(".wrap-guide")
         wrapGuides.push(guide) if guide
       wrapGuides
 
@@ -83,14 +83,16 @@ describe "WrapGuide", ->
 
   describe "when the editor's scroll left changes", ->
     it "updates the wrap guide position to a relative position on screen", ->
-      spyOn(editorElement.component, 'measureDimensions').andCallThrough()
       editor.setText("a long line which causes the editor to scroll")
       editorElement.style.width = "100px"
 
       if atom.views.performDocumentPoll # TODO: Remove this branch once atom.views.performDocumentPoll is gone
         atom.views.performDocumentPoll()
+      else if editorElement.component.presenter?
+        presenter = editorElement.component.presenter
+        waitsFor -> (presenter.scrollWidth - presenter.clientWidth) > 10
       else
-        waitsFor -> editorElement.component.measureDimensions.callCount > 0
+        waitsFor -> editorElement.component.getMaxScrollLeft() > 10
 
       runs ->
         initial = getLeftPosition(wrapGuide)

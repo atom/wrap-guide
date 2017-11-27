@@ -2,10 +2,6 @@ version: "{build}"
 
 platform: x64
 
-branches:
-    only:
-      - master
-
 clone_depth: 10
 
 skip_tags: true
@@ -21,7 +17,7 @@ install:
   - ps: Install-Product node 4
 
 build_script:
-  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/atom/ci/master/build-package.ps1'))
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/atom/ci/run-standard-js-linter-on-test-dir-and-dont-forget-windows/build-package.ps1'))
 
 test: off
 deploy: off

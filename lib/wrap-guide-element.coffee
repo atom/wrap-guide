@@ -1,33 +1,33 @@
 {CompositeDisposable} = require 'atom'
 
-class WrapGuideElement extends HTMLDivElement
-  initialize: (@editor, @editorElement) ->
-    @classList.add('wrap-guide')
+module.exports =
+class WrapGuideElement
+  constructor: (@editor, @editorElement) ->
+    @element = document.createElement('div')
+    @element.setAttribute('is', 'wrap-guide')
+    @element.classList.add('wrap-guide')
     @attachToLines()
     @handleEvents()
     @updateGuide()
     @setTooltip()
 
-    this
+    @element.updateGuide = @updateGuide.bind(this)
+    @element.getDefaultColumn = @getDefaultColumn.bind(this)
 
   attachToLines: ->
-    lines = @editorElement.rootElement?.querySelector?('.lines')
-    lines?.appendChild(this)
+    scrollView = @editorElement.querySelector('.scroll-view')
+    scrollView?.appendChild(@element)
 
   handleEvents: ->
     updateGuideCallback = => @updateGuide()
 
     subscriptions = new CompositeDisposable
     configSubscriptions = @handleConfigEvents()
-    subscriptions.add atom.config.onDidChange('wrap-guide.columns', updateGuideCallback)
     subscriptions.add atom.config.onDidChange 'editor.fontSize', ->
       # setTimeout because we need to wait for the editor measurement to happen
       setTimeout(updateGuideCallback, 0)
 
-    # FIXME: remove conditional as soon as the tiled editor is released.
-    if @editorElement.hasTiledRendering
-      subscriptions.add @editor.onDidChangeScrollLeft(updateGuideCallback)
-
+    subscriptions.add @editorElement.onDidChangeScrollLeft(updateGuideCallback)
     subscriptions.add @editor.onDidChangePath(updateGuideCallback)
     subscriptions.add @editor.onDidChangeGrammar =>
       configSubscriptions.dispose()
@@ -60,41 +60,18 @@ class WrapGuideElement extends HTMLDivElement
   getDefaultColumn: ->
     atom.config.get('editor.preferredLineLength', scope: @editor.getRootScopeDescriptor())
 
-  getGuideColumn: (path, scopeName) ->
-    customColumns = atom.config.get('wrap-guide.columns')
-    return @getDefaultColumn() unless Array.isArray(customColumns)
-
-    for customColumn in customColumns when typeof customColumn is 'object'
-      {pattern, scope, column} = customColumn
-      if pattern
-        try
-          regex = new RegExp(pattern)
-        catch
-          continue
-        return parseInt(column) if regex.test(path)
-      else if scope
-        return parseInt(column) if scope is scopeName
-    @getDefaultColumn()
-
   isEnabled: ->
     atom.config.get('wrap-guide.enabled', scope: @editor.getRootScopeDescriptor()) ? true
 
   updateGuide: ->
-    column = @getGuideColumn(@editor.getPath(), @editor.getGrammar().scopeName)
+    column = @getDefaultColumn()
     if column > 0 and @isEnabled()
       columnWidth = @editorElement.getDefaultCharacterWidth() * column
-      # FIXME: remove conditional as soon as the tiled editor is released.
-      columnWidth -= @editor.getScrollLeft() if @editorElement.hasTiledRendering
-      @style.left = "#{columnWidth}px"
-      @style.display = 'block'
+      columnWidth -= @editorElement.getScrollLeft()
+      @element.style.left = "#{Math.round(columnWidth)}px"
+      @element.style.display = 'block'
     else
-      @style.display = 'none'
+      @element.style.display = 'none'
 
   setTooltip: ->
     @title = "This line is the wrap-guide. You can quickly toggle it via the View menu."
-
-module.exports =
-document.registerElement('wrap-guide',
-  extends: 'div'
-  prototype: WrapGuideElement.prototype
-)

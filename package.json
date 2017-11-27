@@ -8,9 +8,6 @@
   "engines": {
     "atom": "*"
   },
-  "dependencies": {
-    "grim": "^2.0.1"
-  },
   "devDependencies": {
     "coffeelint": "^1.9.7"
   }

@@ -1,5 +1,3 @@
-Grim = require 'grim'
-
 # TODO: remove references to logical display buffer when it is released.
 
 describe "WrapGuide", ->
@@ -77,10 +75,6 @@ describe "WrapGuide", ->
       expect(getLeftPosition(wrapGuide)).toBeGreaterThan(initial)
       expect(wrapGuide).toBeVisible()
 
-      atom.config.set("wrap-guide.columns", [{pattern: ".*", column: column - 10}])
-      expect(getLeftPosition(wrapGuide)).toBeLessThan(initial)
-      expect(wrapGuide).toBeVisible()
-
   describe "when the editor's scroll left changes", ->
     it "updates the wrap guide position to a relative position on screen", ->
       editor.setText("a long line which causes the editor to scroll")
@@ -123,52 +117,6 @@ describe "WrapGuide", ->
       expect(wrapGuide).toBeVisible()
       atom.config.set('wrap-guide.enabled', false, scopeSelector: '.source.coffee')
       expect(wrapGuide).not.toBeVisible()
-
-  describe "using a custom config column", ->
-    it "places the wrap guide at the custom column", ->
-      atom.config.set('wrap-guide.columns', [{pattern: '\.js$', column: 20}])
-      wrapGuide.updateGuide()
-      width = editor.getDefaultCharWidth() * 20
-      expect(width).toBeGreaterThan(0)
-      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan 1
-
-    it "uses the default column when no custom column matches the path", ->
-      atom.config.set('wrap-guide.columns', [{pattern: '\.jsp$', column: '100'}])
-      wrapGuide.updateGuide()
-      width = editor.getDefaultCharWidth() * wrapGuide.getDefaultColumn()
-      expect(width).toBeGreaterThan(0)
-      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan 1
-
-    it "hides the guide when the config column is less than 1", ->
-      atom.config.set('wrap-guide.columns', [{pattern: 'sample\.js$', column: -1}])
-      wrapGuide.updateGuide()
-      expect(wrapGuide).toBeHidden()
-
-    it "ignores invalid regexes", ->
-      atom.config.set('wrap-guide.columns', [{pattern: '(', column: -1}])
-      expect(-> wrapGuide.updateGuide()).not.toThrow()
-
-    it "places the wrap guide at the custom column using scope name", ->
-      atom.config.set('wrap-guide.columns', [{scope: 'source.js', column: 20}])
-      wrapGuide.updateGuide()
-      width = editor.getDefaultCharWidth() * 20
-      expect(width).toBeGreaterThan(0)
-      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan 1
-
-    it "uses the default column when no scope name matches", ->
-      atom.config.set('wrap-guide.columns', [{scope: 'source.gfm', column: '100'}])
-      wrapGuide.updateGuide()
-      width = editor.getDefaultCharWidth() * wrapGuide.getDefaultColumn()
-      expect(width).toBeGreaterThan(0)
-      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan 1
-
-    it "favors the first matching rule", ->
-      atom.config.set('wrap-guide.columns', [{pattern: '\.js$', column: 20},
-                                             {pattern: 'sample\.js$', column: 30}])
-      wrapGuide.updateGuide()
-      width = editor.getDefaultCharWidth() * 20
-      expect(width).toBeGreaterThan(0)
-      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan 1
 
   describe 'scoped config', ->
     it '::getDefaultColumn returns the scope-specific column value', ->

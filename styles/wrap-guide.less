@@ -1,6 +1,6 @@
 @import "syntax-variables";
 
-atom-text-editor::shadow {
+atom-text-editor {
   .wrap-guide {
     height: 100%;
     width: 1px;
@@ -8,5 +8,7 @@ atom-text-editor::shadow {
     position: absolute;
     top: 0;
     background-color: @syntax-wrap-guide-color;
+    -webkit-transform: translateZ(0);
+    pointer-events: none;
   }
 }

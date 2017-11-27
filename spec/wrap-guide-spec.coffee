@@ -1,5 +1,3 @@
-# TODO: remove references to logical display buffer when it is released.
-
 describe "WrapGuide", ->
   [editor, editorElement, wrapGuide, workspaceElement] = []
 
@@ -80,13 +78,7 @@ describe "WrapGuide", ->
       editor.setText("a long line which causes the editor to scroll")
       editorElement.style.width = "100px"
 
-      if atom.views.performDocumentPoll # TODO: Remove this branch once atom.views.performDocumentPoll is gone
-        atom.views.performDocumentPoll()
-      else if editorElement.component.presenter?
-        presenter = editorElement.component.presenter
-        waitsFor -> (presenter.scrollWidth - presenter.clientWidth) > 10
-      else
-        waitsFor -> editorElement.component.getMaxScrollLeft() > 10
+      waitsFor -> editorElement.component.getMaxScrollLeft() > 10
 
       runs ->
         initial = getLeftPosition(wrapGuide)

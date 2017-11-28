@@ -3,6 +3,8 @@
 module.exports =
 class WrapGuideElement
   constructor: (@editor, @editorElement) ->
+    @subscriptions = new CompositeDisposable()
+    @configSubscriptions = new CompositeDisposable()
     @element = document.createElement('div')
     @element.setAttribute('is', 'wrap-guide')
     @element.classList.add('wrap-guide')
@@ -20,41 +22,39 @@ class WrapGuideElement
   handleEvents: ->
     updateGuideCallback = => @updateGuide()
 
-    subscriptions = new CompositeDisposable
-    configSubscriptions = @handleConfigEvents()
-    subscriptions.add atom.config.onDidChange 'editor.fontSize', ->
+    @handleConfigEvents()
+
+    @subscriptions.add atom.config.onDidChange 'editor.fontSize', ->
       # setTimeout because we need to wait for the editor measurement to happen
       setTimeout(updateGuideCallback, 0)
 
-    subscriptions.add @editorElement.onDidChangeScrollLeft(updateGuideCallback)
-    subscriptions.add @editor.onDidChangePath(updateGuideCallback)
-    subscriptions.add @editor.onDidChangeGrammar =>
-      configSubscriptions.dispose()
-      configSubscriptions = @handleConfigEvents()
+    @subscriptions.add @editorElement.onDidChangeScrollLeft(updateGuideCallback)
+    @subscriptions.add @editor.onDidChangePath(updateGuideCallback)
+    @subscriptions.add @editor.onDidChangeGrammar =>
+      @configSubscriptions.dispose()
+      @configSubscriptions = @handleConfigEvents()
       updateGuideCallback()
 
-    subscriptions.add @editor.onDidDestroy ->
-      subscriptions.dispose()
-      configSubscriptions.dispose()
+    @subscriptions.add @editor.onDidDestroy =>
+      @subscriptions.dispose()
+      @configSubscriptions.dispose()
 
-    subscriptions.add @editorElement.onDidAttach =>
+    @subscriptions.add @editorElement.onDidAttach =>
       @attachToLines()
       updateGuideCallback()
 
   handleConfigEvents: ->
     updateGuideCallback = => @updateGuide()
-    subscriptions = new CompositeDisposable
-    subscriptions.add atom.config.onDidChange(
+    @configSubscriptions.add atom.config.onDidChange(
       'editor.preferredLineLength',
       scope: @editor.getRootScopeDescriptor(),
       updateGuideCallback
     )
-    subscriptions.add atom.config.onDidChange(
+    @configSubscriptions.add atom.config.onDidChange(
       'wrap-guide.enabled',
       scope: @editor.getRootScopeDescriptor(),
       updateGuideCallback
     )
-    subscriptions
 
   getDefaultColumn: ->
     atom.config.get('editor.preferredLineLength', scope: @editor.getRootScopeDescriptor())
@@ -71,3 +71,8 @@ class WrapGuideElement
       @element.style.display = 'block'
     else
       @element.style.display = 'none'
+
+  destroy: ->
+    @element.remove()
+    @subscriptions.dispose()
+    @configSubscriptions.dispose()

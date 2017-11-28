@@ -34,9 +34,31 @@ describe "WrapGuideElement", ->
       fontSize = atom.config.get("editor.fontSize")
       atom.config.set("editor.fontSize", fontSize + 10)
 
-      advanceClock(1)
-      expect(getLeftPosition(wrapGuide)).toBeGreaterThan(initial)
-      expect(wrapGuide).toBeVisible()
+      waitsForPromise ->
+        editorElement.getComponent().getNextUpdatePromise()
+
+      runs ->
+        expect(getLeftPosition(wrapGuide)).toBeGreaterThan(initial)
+        expect(wrapGuide).toBeVisible()
+
+    it "updates the wrap guide position for hidden editors", ->
+      initial = getLeftPosition(wrapGuide)
+      expect(initial).toBeGreaterThan(0)
+
+      waitsForPromise ->
+        atom.workspace.open()
+
+      runs ->
+        fontSize = atom.config.get("editor.fontSize")
+        atom.config.set("editor.fontSize", fontSize + 10)
+        atom.workspace.getActivePane().activatePreviousItem()
+
+        waitsForPromise ->
+          editorElement.getComponent().getNextUpdatePromise()
+
+        runs ->
+          expect(getLeftPosition(wrapGuide)).toBeGreaterThan(initial)
+          expect(wrapGuide).toBeVisible()
 
   describe "when the column config changes", ->
     it "updates the wrap guide position", ->

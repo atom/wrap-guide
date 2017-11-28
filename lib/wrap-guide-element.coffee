@@ -24,15 +24,15 @@ class WrapGuideElement
 
     @handleConfigEvents()
 
-    @subscriptions.add atom.config.onDidChange 'editor.fontSize', ->
-      # setTimeout because we need to wait for the editor measurement to happen
-      setTimeout(updateGuideCallback, 0)
+    @subscriptions.add atom.config.onDidChange 'editor.fontSize', =>
+      # TODO: Use async/await once this file is converted to JS
+      @editorElement.getComponent().getNextUpdatePromise().then -> updateGuideCallback()
 
     @subscriptions.add @editorElement.onDidChangeScrollLeft(updateGuideCallback)
     @subscriptions.add @editor.onDidChangePath(updateGuideCallback)
     @subscriptions.add @editor.onDidChangeGrammar =>
       @configSubscriptions.dispose()
-      @configSubscriptions = @handleConfigEvents()
+      @handleConfigEvents()
       updateGuideCallback()
 
     @subscriptions.add @editor.onDidDestroy =>

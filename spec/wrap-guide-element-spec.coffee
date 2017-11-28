@@ -1,8 +1,7 @@
-describe "WrapGuide", ->
-  [editor, editorElement, wrapGuide, workspaceElement] = []
+{getLeftPosition} = require './helpers'
 
-  getLeftPosition = (element) ->
-    parseInt(element.style.left)
+describe "WrapGuideElement", ->
+  [editor, editorElement, wrapGuide, workspaceElement] = []
 
   beforeEach ->
     workspaceElement = atom.views.getView(atom.workspace)
@@ -27,31 +26,6 @@ describe "WrapGuide", ->
       editor = atom.workspace.getActiveTextEditor()
       editorElement = editor.getElement()
       wrapGuide = editorElement.querySelector(".wrap-guide")
-
-  describe ".activate", ->
-    getWrapGuides  = ->
-      wrapGuides = []
-      atom.workspace.getTextEditors().forEach (editor) ->
-        guide = editor.getElement().querySelector(".wrap-guide")
-        wrapGuides.push(guide) if guide
-      wrapGuides
-
-    it "appends a wrap guide to all existing and new editors", ->
-      expect(atom.workspace.getTextEditors().length).toBe 1
-      expect(getWrapGuides().length).toBe 1
-      expect(getLeftPosition(getWrapGuides()[0])).toBeGreaterThan(0)
-
-      atom.workspace.getActivePane().splitRight(copyActiveItem: true)
-      expect(atom.workspace.getTextEditors().length).toBe 2
-      expect(getWrapGuides().length).toBe 2
-      expect(getLeftPosition(getWrapGuides()[0])).toBeGreaterThan(0)
-      expect(getLeftPosition(getWrapGuides()[1])).toBeGreaterThan(0)
-
-    it "positions the guide at the configured column", ->
-      width = editor.getDefaultCharWidth() * wrapGuide.getDefaultColumn()
-      expect(width).toBeGreaterThan(0)
-      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan 1
-      expect(wrapGuide).toBeVisible()
 
   describe "when the font size changes", ->
     it "updates the wrap guide position", ->

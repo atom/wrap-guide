@@ -1,14 +1,23 @@
+{CompositeDisposable} = require 'atom'
 WrapGuideElement = require './wrap-guide-element'
 
 module.exports =
   activate: ->
-    watchedEditors = new WeakSet()
+    @subscriptions = new CompositeDisposable()
+    @wrapGuides = new Map()
 
-    atom.workspace.observeTextEditors (editor) ->
-      return if watchedEditors.has(editor)
+    @subscriptions.add atom.workspace.observeTextEditors (editor) =>
+      return if @wrapGuides.has(editor)
 
       editorElement = atom.views.getView(editor)
       wrapGuideElement = new WrapGuideElement(editor, editorElement)
 
-      watchedEditors.add(editor)
-      editor.onDidDestroy -> watchedEditors.delete(editor)
+      @wrapGuides.set(editor, wrapGuideElement)
+      @subscriptions.add editor.onDidDestroy =>
+        @wrapGuides.get(editor).destroy()
+        @wrapGuides.delete(editor)
+
+  deactivate: ->
+    @subscriptions.dispose()
+    @wrapGuides.forEach (wrapGuide, editor) -> wrapGuide.destroy()
+    @wrapGuides.clear()

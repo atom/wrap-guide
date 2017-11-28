@@ -25,6 +25,7 @@ class WrapGuideElement
     @handleConfigEvents()
 
     @subscriptions.add atom.config.onDidChange 'editor.fontSize', =>
+      # Wait for editor to finish updating before updating wrap guide
       # TODO: Use async/await once this file is converted to JS
       @editorElement.getComponent().getNextUpdatePromise().then -> updateGuideCallback()
 

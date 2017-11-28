@@ -41,7 +41,7 @@ describe "WrapGuideElement", ->
         expect(getLeftPosition(wrapGuide)).toBeGreaterThan(initial)
         expect(wrapGuide).toBeVisible()
 
-    it "updates the wrap guide position for hidden editors", ->
+    it "updates the wrap guide position for hidden editors when they become visible", ->
       initial = getLeftPosition(wrapGuide)
       expect(initial).toBeGreaterThan(0)
 

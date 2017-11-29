@@ -13,9 +13,7 @@ module.exports =
       wrapGuideElement = new WrapGuideElement(editor, editorElement)
 
       @wrapGuides.set(editor, wrapGuideElement)
-      @subscriptions.add editor.onDidDestroy =>
-        @wrapGuides.get(editor).destroy()
-        @wrapGuides.delete(editor)
+      @subscriptions.add editor.onDidDestroy => @wrapGuides.delete(editor)
 
   deactivate: ->
     @subscriptions.dispose()

@@ -36,9 +36,7 @@ class WrapGuideElement
       @handleConfigEvents()
       updateGuideCallback()
 
-    @subscriptions.add @editor.onDidDestroy =>
-      @subscriptions.dispose()
-      @configSubscriptions.dispose()
+    @subscriptions.add @editor.onDidDestroy => @destroy()
 
     @subscriptions.add @editorElement.onDidAttach =>
       @attachToLines()

@@ -65,7 +65,7 @@ class WrapGuideElement
   updateGuide: ->
     column = @getDefaultColumn()
     if column > 0 and @isEnabled()
-      columnWidth = @editorElement.getDefaultCharacterWidth() * column
+      columnWidth = @editorElement.getComponent().getBaseCharacterWidth() * column
       columnWidth -= @editorElement.getScrollLeft()
       @element.style.left = "#{Math.round(columnWidth)}px"
       @element.style.display = 'block'

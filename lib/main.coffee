@@ -9,8 +9,7 @@ module.exports =
     @subscriptions.add atom.workspace.observeTextEditors (editor) =>
       return if @wrapGuides.has(editor)
 
-      editorElement = atom.views.getView(editor)
-      wrapGuideElement = new WrapGuideElement(editor, editorElement)
+      wrapGuideElement = new WrapGuideElement(editor)
 
       @wrapGuides.set(editor, wrapGuideElement)
       @subscriptions.add editor.onDidDestroy => @wrapGuides.delete(editor)

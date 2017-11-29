@@ -2,9 +2,10 @@
 
 module.exports =
 class WrapGuideElement
-  constructor: (@editor, @editorElement) ->
+  constructor: (@editor) ->
     @subscriptions = new CompositeDisposable()
     @configSubscriptions = new CompositeDisposable()
+    @editorElement = atom.views.getView(@editor)
     @element = document.createElement('div')
     @element.setAttribute('is', 'wrap-guide')
     @element.classList.add('wrap-guide')

@@ -21,3 +21,6 @@ module.exports =
     @subscriptions.dispose()
     @wrapGuides.forEach (wrapGuide, editor) -> wrapGuide.destroy()
     @wrapGuides.clear()
+
+  uniqueAscending: (list) ->
+    (list.filter((item, index) -> list.indexOf(item) is index)).sort((a, b) -> a - b)

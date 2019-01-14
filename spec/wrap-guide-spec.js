@@ -10,7 +10,7 @@ describe('Wrap Guide', () => {
 
     editor = await atom.workspace.open('sample.js')
     editorElement = editor.getElement()
-    wrapGuide = editorElement.querySelector('.wrap-guide')
+    wrapGuide = editorElement.querySelector('.wrap-guide-container')
 
     jasmine.attachToDOM(atom.views.getView(atom.workspace))
   })
@@ -31,8 +31,8 @@ describe('Wrap Guide', () => {
     it('positions the guide at the configured column', () => {
       width = editor.getDefaultCharWidth() * wrapGuide.getDefaultColumn()
       expect(width).toBeGreaterThan(0)
-      expect(Math.abs(getLeftPosition(wrapGuide) - width)).toBeLessThan(1)
-      expect(wrapGuide).toBeVisible()
+      expect(Math.abs(getLeftPosition(wrapGuide.firstChild) - width)).toBeLessThan(1)
+      expect(wrapGuide.firstChild).toBeVisible()
     })
   })
 

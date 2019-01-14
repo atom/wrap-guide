@@ -32,7 +32,7 @@ Multiple guide lines are also supported. For example, add the following to your 
 
 ```coffeescript
 'wrap-guide':
-  'guides': [72, 80, 100, 120]
+  'columns': [72, 80, 100, 120]
 ```
 
 > Note: When using multiple guide lines, the right-most guide line functions as your `editor.preferredLineLength` setting.

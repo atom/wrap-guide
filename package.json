@@ -9,7 +9,7 @@
     "atom": "*"
   },
   "configSchema": {
-    "guides": {
+    "columns": {
       "default": [],
       "type": "array",
       "items": {

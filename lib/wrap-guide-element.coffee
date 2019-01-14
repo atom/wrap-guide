@@ -49,11 +49,11 @@ class WrapGuideElement
 
     updatePreferredLineLengthCallback = (args) =>
       # ensure that the right-most wrap guide is the preferredLineLength
-      multiGuides = atom.config.get('wrap-guide.guides', scope: @editor.getRootScopeDescriptor())
-      if multiGuides.length > 0
-        multiGuides[multiGuides.length - 1] = args.newValue
-        multiGuides = uniqueAscending(i for i in multiGuides when i <= args.newValue)
-        atom.config.set 'wrap-guide.guides', multiGuides,
+      columns = atom.config.get('wrap-guide.columns', scope: @editor.getRootScopeDescriptor())
+      if columns.length > 0
+        columns[columns.length - 1] = args.newValue
+        columns = uniqueAscending(i for i in columns when i <= args.newValue)
+        atom.config.set 'wrap-guide.columns', columns,
           scopeSelector: ".#{@editor.getGrammar().scopeName}"
       @updateGuide()
     @configSubscriptions.add atom.config.onDidChange(
@@ -71,14 +71,14 @@ class WrapGuideElement
 
     updateGuidesCallback = (args) =>
       # ensure that multiple guides stay sorted in ascending order
-      guides = uniqueAscending(args.newValue)
-      if guides?.length
-        atom.config.set('wrap-guide.guides', guides)
-        atom.config.set 'editor.preferredLineLength', guides[guides.length - 1],
+      columns = uniqueAscending(args.newValue)
+      if columns?.length
+        atom.config.set('wrap-guide.columns', columns)
+        atom.config.set 'editor.preferredLineLength', columns[columns.length - 1],
           scopeSelector: ".#{@editor.getGrammar().scopeName}"
         @updateGuide()
     @configSubscriptions.add atom.config.onDidChange(
-      'wrap-guide.guides',
+      'wrap-guide.columns',
       scope: @editor.getRootScopeDescriptor(),
       updateGuidesCallback
     )
@@ -87,8 +87,8 @@ class WrapGuideElement
     atom.config.get('editor.preferredLineLength', scope: @editor.getRootScopeDescriptor())
 
   getGuidesColumns: (path, scopeName) ->
-    multiGuides = atom.config.get('wrap-guide.guides', scope: @editor.getRootScopeDescriptor()) ? []
-    return multiGuides if multiGuides.length > 0
+    columns = atom.config.get('wrap-guide.columns', scope: @editor.getRootScopeDescriptor()) ? []
+    return columns if columns.length > 0
     return [@getDefaultColumn()]
 
   isEnabled: ->

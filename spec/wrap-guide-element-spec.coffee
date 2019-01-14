@@ -55,8 +55,8 @@ describe "WrapGuideElement", ->
       expect(wrapGuide).toBeVisible()
 
     it "appends multiple wrap guides to all existing and new editors", ->
-      guides = [10, 20, 30]
-      atom.config.set("wrap-guide.guides", guides)
+      columns = [10, 20, 30]
+      atom.config.set("wrap-guide.columns", columns)
 
       waitsForPromise ->
         editorElement.getComponent().getNextUpdatePromise()
@@ -65,7 +65,7 @@ describe "WrapGuideElement", ->
         expect(atom.workspace.getTextEditors().length).toBe 1
         expect(getWrapGuides().length).toBe 1
         positions = getLeftPositions(getWrapGuides()[0])
-        expect(positions.length).toBe(guides.length)
+        expect(positions.length).toBe(columns.length)
         expect(positions[0]).toBeGreaterThan(0)
         expect(positions[1]).toBeGreaterThan(positions[0])
         expect(positions[2]).toBeGreaterThan(positions[1])
@@ -74,7 +74,7 @@ describe "WrapGuideElement", ->
         expect(atom.workspace.getTextEditors().length).toBe 2
         expect(getWrapGuides().length).toBe 2
         pane1_positions = getLeftPositions(getWrapGuides()[0])
-        expect(pane1_positions.length).toBe(guides.length)
+        expect(pane1_positions.length).toBe(columns.length)
         expect(pane1_positions[0]).toBeGreaterThan(0)
         expect(pane1_positions[1]).toBeGreaterThan(pane1_positions[0])
         expect(pane1_positions[2]).toBeGreaterThan(pane1_positions[1])
@@ -86,8 +86,8 @@ describe "WrapGuideElement", ->
 
     it "positions multiple guides at the configured columns", ->
       columnCount = 5
-      guides = (c * 10 for c in [1..columnCount])
-      atom.config.set("wrap-guide.guides", guides)
+      columns = (c * 10 for c in [1..columnCount])
+      atom.config.set("wrap-guide.columns", columns)
       waitsForPromise ->
         editorElement.getComponent().getNextUpdatePromise()
 
@@ -97,7 +97,7 @@ describe "WrapGuideElement", ->
         expect(wrapGuide.children.length).toBe(columnCount)
 
         for i in columnCount - 1
-          width = editor.getDefaultCharWidth() * guides[i]
+          width = editor.getDefaultCharWidth() * columns[i]
           expect(width).toBeGreaterThan(0)
           expect(Math.abs(getLeftPosition(wrapGuide.children[i]) - width)).toBeLessThan 1
         expect(wrapGuide).toBeVisible()
@@ -147,7 +147,7 @@ describe "WrapGuideElement", ->
   describe "when the preferredLineLength changes", ->
     it "updates the wrap guide positions", ->
       initial = [10, 15, 20, 30]
-      atom.config.set 'wrap-guide.guides', initial,
+      atom.config.set 'wrap-guide.columns', initial,
         scopeSelector: ".#{editor.getGrammar().scopeName}"
       waitsForPromise ->
         editorElement.getComponent().getNextUpdatePromise()
@@ -159,25 +159,25 @@ describe "WrapGuideElement", ->
           editorElement.getComponent().getNextUpdatePromise()
 
         runs ->
-          guides = atom.config.get('wrap-guide.guides', scope: editor.getRootScopeDescriptor())
-          expect(guides.length).toBe(2)
-          expect(guides[0]).toBe(10)
-          expect(guides[1]).toBe(15)
+          columns = atom.config.get('wrap-guide.columns', scope: editor.getRootScopeDescriptor())
+          expect(columns.length).toBe(2)
+          expect(columns[0]).toBe(10)
+          expect(columns[1]).toBe(15)
 
-  describe "when the guides config changes", ->
+  describe "when the columns config changes", ->
     it "updates the wrap guide positions", ->
       initial = getLeftPositions(wrapGuide.children)
       expect(initial.length).toBe(1)
       expect(initial[0]).toBeGreaterThan(0)
 
-      guides = [10, 20, 30]
-      atom.config.set("wrap-guide.guides", guides)
+      columns = [10, 20, 30]
+      atom.config.set("wrap-guide.columns", columns)
       waitsForPromise ->
         editorElement.getComponent().getNextUpdatePromise()
 
       runs ->
         positions = getLeftPositions(wrapGuide.children)
-        expect(positions.length).toBe(guides.length)
+        expect(positions.length).toBe(columns.length)
         expect(positions[0]).toBeGreaterThan(0)
         expect(positions[1]).toBeGreaterThan(positions[0])
         expect(positions[2]).toBeGreaterThan(positions[1])
@@ -185,7 +185,7 @@ describe "WrapGuideElement", ->
 
     it "updates the preferredLineLength", ->
       initial = atom.config.get('editor.preferredLineLength', scope: editor.getRootScopeDescriptor())
-      atom.config.set("wrap-guide.guides", [initial, initial + 10])
+      atom.config.set("wrap-guide.columns", [initial, initial + 10])
       waitsForPromise ->
         editorElement.getComponent().getNextUpdatePromise()
 
@@ -198,21 +198,21 @@ describe "WrapGuideElement", ->
       expect(initial.length).toBe(1)
       expect(initial[0]).toBeGreaterThan(0)
 
-      reverseGuides = [30, 20, 10]
-      guides = [reverseGuides[reverseGuides.length - 1], reverseGuides..., reverseGuides[0]]
-      uniqueGuides = uniqueAscending(guides)
-      expect(uniqueGuides.length).toBe(3)
-      expect(uniqueGuides[0]).toBeGreaterThan(0)
-      expect(uniqueGuides[1]).toBeGreaterThan(uniqueGuides[0])
-      expect(uniqueGuides[2]).toBeGreaterThan(uniqueGuides[1])
+      reverseColumns = [30, 20, 10]
+      columns = [reverseColumns[reverseColumns.length - 1], reverseColumns..., reverseColumns[0]]
+      uniqueColumns = uniqueAscending(columns)
+      expect(uniqueColumns.length).toBe(3)
+      expect(uniqueColumns[0]).toBeGreaterThan(0)
+      expect(uniqueColumns[1]).toBeGreaterThan(uniqueColumns[0])
+      expect(uniqueColumns[2]).toBeGreaterThan(uniqueColumns[1])
 
-      atom.config.set("wrap-guide.guides", guides)
+      atom.config.set("wrap-guide.columns", columns)
       waitsForPromise ->
         editorElement.getComponent().getNextUpdatePromise()
 
       runs ->
         positions = getLeftPositions(wrapGuide.children)
-        expect(positions.length).toBe(uniqueGuides.length)
+        expect(positions.length).toBe(uniqueColumns.length)
         expect(positions[0]).toBeGreaterThan(0)
         expect(positions[1]).toBeGreaterThan(positions[0])
         expect(positions[2]).toBeGreaterThan(positions[1])

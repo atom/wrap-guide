@@ -23,6 +23,6 @@
     }
   },
   "devDependencies": {
-    "coffeelint": "^1.9.7"
+    "prettier": "^1.18.2"
   }
 }
